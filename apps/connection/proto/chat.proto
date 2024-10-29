@@ -1,0 +1,45 @@
+syntax = 'proto3';
+
+message Chat {
+    Connect connect = 1;
+    ConnAck conn_ack = 2;
+    Disconnect disconnect = 3;
+    DisconnectAck disconnect_ack = 4;
+    Ping ping = 5;
+    Pong pong = 6;
+    Sync sync = 7;
+    SyncAck sync_ack = 8;
+}
+message Connect {
+    string uid = 1;
+    string password = 2;
+}
+
+message ConnAck {
+    bool success = 1;
+    string message = 2;
+}
+
+message Disconnect {
+    string reason = 1;
+}
+
+message DisconnectAck {
+    bool success = 1;
+    string message = 2;
+}
+
+message Ping {
+}
+
+message Pong {
+}
+
+message Sync {
+   bytes payload = 1;
+}
+
+message SyncAck {
+    bool success = 1;
+    string message = 2;
+}
