@@ -5,6 +5,7 @@ defmodule ConnectionTest do
   alias Connection.Protos.Connect
   alias Connection.Protos.ConnAck
   alias Connection.Protos.DisconnectAck
+  alias Connection.Protos.Chat
 
   test "connect encode" do
     connect = %Connection.Protos.Connect{uid: "123", password: "456"}
@@ -32,5 +33,13 @@ defmodule ConnectionTest do
     encoded = DisconnectAck.encode(disconnect_ack)
     assert <<8, 1, 18, 2, 111, 107>> == encoded
     assert DisconnectAck.decode(encoded) == disconnect_ack
+  end
+
+  test "chat encode" do
+    connect = %Connection.Protos.Connect{uid: "123", password: "456"}
+    chat = %Connection.Protos.Chat{connect: connect}
+    encoded = Chat.encode(chat)
+    assert <<10, 10, 10, 3, 49, 50, 51, 18, 3, 52, 53, 54>> == encoded
+    assert Chat.decode(encoded) == chat
   end
 end
