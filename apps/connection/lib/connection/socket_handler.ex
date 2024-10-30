@@ -3,7 +3,7 @@ defmodule Connection.SocketHandler do
 
   @impl true
   def init(request, _state) do
-    state = %{registry_key: request.path}
+    state = %{registry_key: request.path, status: :waiting_provision}
     {:cowboy_websocket, request, state}
   end
 
@@ -16,18 +16,20 @@ defmodule Connection.SocketHandler do
   end
 
   @impl true
-  def websocket_handle({:text, json}, state) do
-    payload = Jason.decode!(json)
-    message = payload["data"]["message"]
+  def websocket_handle({:binary, chat}, state) do
+    chat = Protos.Chat.decode(chat)
+    IO.puts("chat: #{inspect(chat)}")
+    Connection.Client.handle(chat, state)
+    message = "hello, recved"
 
-    Registry.Connection
-    |> Registry.dispatch(state.registry_key, fn entries ->
-      for {pid, _} <- entries do
-        if pid != self() do
-          send(pid, message)
-        end
-      end
-    end)
+    # Registry.Connection
+    # |> Registry.dispatch(state.registry_key, fn entries ->
+    #   for {pid, _} <- entries do
+    #     if pid != self() do
+    #       send(pid, message)
+    #     end
+    #   end
+    # end)
 
     {:reply, {:text, message}, state}
   end

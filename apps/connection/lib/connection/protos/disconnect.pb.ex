@@ -1,4 +1,4 @@
-defmodule Connection.Protos.DisconnectAck do
+defmodule Protos.Disconnect do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,33 +6,19 @@ defmodule Connection.Protos.DisconnectAck do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.DescriptorProto{
-      name: "DisconnectAck",
+      name: "Disconnect",
       field: [
         %Google.Protobuf.FieldDescriptorProto{
-          name: "success",
+          name: "reason",
           extendee: nil,
           number: 1,
-          label: :LABEL_OPTIONAL,
-          type: :TYPE_BOOL,
-          type_name: nil,
-          default_value: nil,
-          options: nil,
-          oneof_index: nil,
-          json_name: "success",
-          proto3_optional: nil,
-          __unknown_fields__: []
-        },
-        %Google.Protobuf.FieldDescriptorProto{
-          name: "message",
-          extendee: nil,
-          number: 2,
           label: :LABEL_OPTIONAL,
           type: :TYPE_STRING,
           type_name: nil,
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "message",
+          json_name: "reason",
           proto3_optional: nil,
           __unknown_fields__: []
         }
@@ -49,8 +35,7 @@ defmodule Connection.Protos.DisconnectAck do
     }
   end
 
-  field :success, 1, type: :bool
-  field :message, 2, type: :string
+  field :reason, 1, type: :string
 
   def transform_module(), do: Connection.Transform
 end

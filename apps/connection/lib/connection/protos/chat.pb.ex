@@ -1,4 +1,4 @@
-defmodule Connection.Protos.Chat do
+defmodule Protos.Chat do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -133,14 +133,14 @@ defmodule Connection.Protos.Chat do
     }
   end
 
-  field :connect, 1, type: Connection.Protos.Connect
-  field :conn_ack, 2, type: Connection.Protos.ConnAck, json_name: "connAck"
-  field :disconnect, 3, type: Connection.Protos.Disconnect
-  field :disconnect_ack, 4, type: Connection.Protos.DisconnectAck, json_name: "disconnectAck"
-  field :ping, 5, type: Connection.Protos.Ping
-  field :pong, 6, type: Connection.Protos.Pong
-  field :sync, 7, type: Connection.Protos.Sync
-  field :sync_ack, 8, type: Connection.Protos.SyncAck, json_name: "syncAck"
+  field :connect, 1, type: Protos.Connect
+  field :conn_ack, 2, type: Protos.ConnAck, json_name: "connAck"
+  field :disconnect, 3, type: Protos.Disconnect
+  field :disconnect_ack, 4, type: Protos.DisconnectAck, json_name: "disconnectAck"
+  field :ping, 5, type: Protos.Ping
+  field :pong, 6, type: Protos.Pong
+  field :sync, 7, type: Protos.Sync
+  field :sync_ack, 8, type: Protos.SyncAck, json_name: "syncAck"
 
   def transform_module(), do: Connection.Transform
 end

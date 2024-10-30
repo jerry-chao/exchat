@@ -1,4 +1,4 @@
-defmodule Connection.Protos.SyncAck do
+defmodule Protos.DisconnectAck do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,7 +6,7 @@ defmodule Connection.Protos.SyncAck do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.DescriptorProto{
-      name: "SyncAck",
+      name: "DisconnectAck",
       field: [
         %Google.Protobuf.FieldDescriptorProto{
           name: "success",

@@ -38,11 +38,15 @@ class myWebsocketHandler {
     const message = input.value;
     input.value = "";
 
-    this.socket.send(
-      JSON.stringify({
-        data: { message: message },
-      }),
-    );
+    const connect = this.Connect.create({
+      uid: "zhangchao",
+      password: "123456",
+    });
+    const chat = this.Chat.create({
+      connect: connect,
+    });
+    const buffer = this.Chat.encode(chat).finish();
+    this.socket.send(buffer);
   }
 }
 

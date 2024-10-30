@@ -1,4 +1,4 @@
-defmodule Connection.Protos.Connect do
+defmodule Protos.SyncAck do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,24 +6,24 @@ defmodule Connection.Protos.Connect do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.DescriptorProto{
-      name: "Connect",
+      name: "SyncAck",
       field: [
         %Google.Protobuf.FieldDescriptorProto{
-          name: "uid",
+          name: "success",
           extendee: nil,
           number: 1,
           label: :LABEL_OPTIONAL,
-          type: :TYPE_STRING,
+          type: :TYPE_BOOL,
           type_name: nil,
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "uid",
+          json_name: "success",
           proto3_optional: nil,
           __unknown_fields__: []
         },
         %Google.Protobuf.FieldDescriptorProto{
-          name: "password",
+          name: "message",
           extendee: nil,
           number: 2,
           label: :LABEL_OPTIONAL,
@@ -32,7 +32,7 @@ defmodule Connection.Protos.Connect do
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "password",
+          json_name: "message",
           proto3_optional: nil,
           __unknown_fields__: []
         }
@@ -49,8 +49,8 @@ defmodule Connection.Protos.Connect do
     }
   end
 
-  field :uid, 1, type: :string
-  field :password, 2, type: :string
+  field :success, 1, type: :bool
+  field :message, 2, type: :string
 
   def transform_module(), do: Connection.Transform
 end

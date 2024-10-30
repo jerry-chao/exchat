@@ -1,4 +1,4 @@
-defmodule Connection.Protos.Pong do
+defmodule Protos.Pong do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
