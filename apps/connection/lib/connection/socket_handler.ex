@@ -21,11 +21,11 @@ defmodule Connection.SocketHandler do
     IO.puts("chat: #{inspect(chat)}")
 
     case Connection.Client.handle(chat, state) do
-      %{error: :ok, response: response, state: state} ->
-        IO.puts("handle success")
+      %{result: :ok, response: response, state: state} ->
+        IO.puts("handle success #{inspect(response)}")
         {:reply, {:binary, Protos.Chat.encode(response)}, state}
 
-      %{error: :error, response: response, state: state} ->
+      %{result: :error, response: response, state: state} ->
         IO.puts("handle error")
         {:reply, {:binary, Protos.Chat.encode(response)}, state}
     end
@@ -38,6 +38,11 @@ defmodule Connection.SocketHandler do
     #     end
     #   end
     # end)
+  end
+
+  def websocket_handle({:ping, "PING"}, state) do
+    IO.puts("websocket_handle received ping")
+    {:reply, {:pong, "PONG"}, state}
   end
 
   def websocket_handle(arg0, state) do
