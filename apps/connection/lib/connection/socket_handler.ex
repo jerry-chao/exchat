@@ -3,15 +3,12 @@ defmodule Connection.SocketHandler do
 
   @impl true
   def init(request, _state) do
-    state = %{registry_key: request.path, status: :waiting_provision}
+    state = %{room: request.path, status: :waiting_provision}
     {:cowboy_websocket, request, state}
   end
 
   @impl true
   def websocket_init(state) do
-    Registry.Connection
-    |> Registry.register(state.registry_key, [])
-
     {:ok, state}
   end
 
@@ -29,15 +26,6 @@ defmodule Connection.SocketHandler do
         IO.puts("handle error")
         {:reply, {:binary, Protos.Chat.encode(response)}, state}
     end
-
-    # Registry.Connection
-    # |> Registry.dispatch(state.registry_key, fn entries ->
-    #   for {pid, _} <- entries do
-    #     if pid != self() do
-    #       send(pid, message)
-    #     end
-    #   end
-    # end)
   end
 
   def websocket_handle({:ping, "PING"}, state) do
@@ -52,6 +40,7 @@ defmodule Connection.SocketHandler do
 
   @impl true
   def websocket_info(info, state) do
-    {:reply, {:text, info}, state}
+    IO.puts("websocket_info: send data to client #{inspect(info)}")
+    {:reply, {:binary, info}, state}
   end
 end

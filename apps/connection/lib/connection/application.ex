@@ -16,7 +16,7 @@ defmodule Connection.Application do
         options: [dispatch: dispatch(), port: 4000]
       ),
       Registry.child_spec(
-        keys: :unique,
+        keys: :duplicate,
         name: Registry.Connection
       )
     ]

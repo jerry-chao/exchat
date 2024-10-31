@@ -28,8 +28,22 @@ defmodule Connection.Client do
     request
   end
 
-  def handle_sync(%{result: :ok} = request, %Protos.Sync{payload: payload}) do
-    IO.puts("sync received: #{inspect(payload)}")
+  def handle_sync(%{result: :ok, state: state} = request, %Protos.Sync{payload: payload}) do
+    IO.puts("sync received: #{inspect(payload)}, room #{state.room}")
+
+    # send message to all clients in the same path
+    sync = %Protos.Sync{payload: payload}
+
+    Registry.Connection
+    |> Registry.dispatch(state.room, fn entries ->
+      IO.puts("dispatch to all clients in the same room, entries: #{inspect(entries)}")
+
+      for {pid, _} <- entries do
+        if pid != self() do
+          send(pid, Protos.Chat.encode(%Protos.Chat{sync: sync}))
+        end
+      end
+    end)
 
     response =
       %Protos.Chat{
@@ -82,12 +96,15 @@ defmodule Connection.Client do
 
     case auth(uid, password) do
       true ->
-        IO.puts("auth success")
+        IO.puts("auth success uid #{uid}, room: #{state.room}")
 
         response =
           %Protos.Chat{
             conn_ack: %Protos.ConnAck{success: true, message: "you are logined"}
           }
+
+        Registry.Connection
+        |> Registry.register(state.room, [])
 
         %{request | response: response, state: %{state | status: :connected}}
 

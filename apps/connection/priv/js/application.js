@@ -77,27 +77,34 @@ class myWebsocketHandler {
       const arrayBuffer = await event.data.arrayBuffer();
       const uint8Array = new Uint8Array(arrayBuffer);
       const decodedMessage = this.Chat.decode(uint8Array);
+      var show = JSON.stringify(decodedMessage);
       if (decodedMessage.pong) {
         this.handlePong();
-        return;
       }
 
-      if (decodedMessage.connack) {
+      if (decodedMessage.connAck) {
         this.handleConnack();
-        return;
       }
 
-      if (decodedMessage.sync_ack) {
+      if (decodedMessage.syncAck) {
         this.handleSyncAck();
-        return;
+      }
+
+      if (decodedMessage.sync) {
+        show = this.handleSync(decodedMessage.sync);
       }
 
       const pTag = document.createElement("p");
-      pTag.innerHTML = JSON.stringify(decodedMessage);
+      pTag.innerHTML = show;
       document.getElementById("main").append(pTag);
     } catch (error) {
       console.error("Error processing message:", error);
     }
+  }
+
+  handleSync(sync) {
+    console.log("Received sync message", sync);
+    return sync.payload;
   }
 
   dispatchEvent(name, detail = {}) {
