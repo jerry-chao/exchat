@@ -4,11 +4,10 @@ defmodule Connection.Client do
   """
 
   def handle(chat, state) do
-    %{}
-    |> handle_connect(state, chat.connect)
+    %{error: nil, state: state} |> handle_connect(chat.connect)
   end
 
-  def handle_connect(%{error: nil}, %{status: :waiting_provision} = state, connect) do
+  def handle_connect(%{error: nil, state: %{status: :waiting_provision} = state}, connect) do
     IO.puts("connect: #{inspect(connect)}")
     uid = connect.uid
     password = connect.password
@@ -16,16 +15,28 @@ defmodule Connection.Client do
     case auth(uid, password) do
       true ->
         IO.puts("auth success")
-        {:ok, %{state | status: :connected}}
+
+        response =
+          %Protos.Chat{
+            conn_ack: %Protos.ConnAck{success: true, message: "you are logined"}
+          }
+
+        %{error: :ok, response: response, state: %{state | status: :connected}}
 
       false ->
         IO.puts("auth failed")
-        {:error, %{state | status: :auth_failed}}
+
+        response =
+          %Protos.Chat{
+            conn_ack: %Protos.ConnAck{success: false, message: "auth failed"}
+          }
+
+        %{error: :error, response: response, state: %{state | status: :auth_failed}}
     end
   end
 
-  def handle_connect(%{error: _error}, state, _connect) do
-    {:error, state}
+  def handle_connect(%{error: error, state: state}, _connect) do
+    %{error: error, state: state}
   end
 
   def auth("zhangchao", "123456") do

@@ -19,8 +19,16 @@ defmodule Connection.SocketHandler do
   def websocket_handle({:binary, chat}, state) do
     chat = Protos.Chat.decode(chat)
     IO.puts("chat: #{inspect(chat)}")
-    Connection.Client.handle(chat, state)
-    message = "hello, recved"
+
+    case Connection.Client.handle(chat, state) do
+      %{error: :ok, response: response, state: state} ->
+        IO.puts("handle success")
+        {:reply, {:binary, Protos.Chat.encode(response)}, state}
+
+      %{error: :error, response: response, state: state} ->
+        IO.puts("handle error")
+        {:reply, {:binary, Protos.Chat.encode(response)}, state}
+    end
 
     # Registry.Connection
     # |> Registry.dispatch(state.registry_key, fn entries ->
@@ -30,8 +38,11 @@ defmodule Connection.SocketHandler do
     #     end
     #   end
     # end)
+  end
 
-    {:reply, {:text, message}, state}
+  def websocket_handle(arg0, state) do
+    IO.puts("websocket_handle received unknown messages: #{inspect(arg0)}")
+    {:ok, state}
   end
 
   @impl true
