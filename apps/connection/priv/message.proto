@@ -1,0 +1,30 @@
+syntax = 'proto3';
+
+message Message {
+    string from = 1;
+    string to = 2;
+    optional TextMessage text = 3;
+    Response response = 4;
+}
+
+enum Status {
+    OK = 0;
+    ERROR = 1;
+}
+
+enum Code {
+    CODE_OK = 0;
+    CODE_INVALID_FROM = 1;
+    CODE_INVALID_TO = 2;
+    CODE_INVALID_EMPTY_MSG = 3;
+}
+
+message Response {
+    Status status = 1;
+    Code code = 2;
+    string reason = 3;
+}
+
+message TextMessage {
+    string text = 3;
+}

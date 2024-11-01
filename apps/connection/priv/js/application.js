@@ -38,6 +38,10 @@ class myWebsocketHandler {
       this.Sync = root.lookupType("Sync");
       this.SyncAck = root.lookupType("SyncAck");
 
+      const messageProto = await protobuf.load("message.proto");
+      this.Message = messageProto.lookupType("Message");
+      this.TextMessage = messageProto.lookupType("TextMessage");
+      this.Response = messageProto.lookupType("Response");
       // Once protobuf is loaded, setup socket
       this.setupSocket();
     } catch (error) {
@@ -87,7 +91,8 @@ class myWebsocketHandler {
       }
 
       if (decodedMessage.syncAck) {
-        this.handleSyncAck();
+        const syncResult = await this.handleSyncAck(decodedMessage.syncAck);
+        show = JSON.stringify(syncResult);
       }
 
       if (decodedMessage.sync) {
@@ -103,7 +108,7 @@ class myWebsocketHandler {
   }
 
   handleSync(sync) {
-    console.log("Received sync message", sync);
+    console.log(`Received sync message result ${sync}`);
     return sync.payload;
   }
 
@@ -112,8 +117,12 @@ class myWebsocketHandler {
     window.dispatchEvent(event);
   }
 
-  handleSyncAck() {
-    console.log("received sync ack message");
+  async handleSyncAck(ack) {
+    console.log(`received sync ack message`, ack);
+    const decodedMessage = this.Message.decode(ack.detail);
+    console.log(`received sync ack detail`, decodedMessage);
+    console.log(`received response code: ${decodedMessage.response.code}, status: ${decodedMessage.response.status}`);
+    return decodedMessage;
   }
 
   handleConnack() {
@@ -221,13 +230,20 @@ class myWebsocketHandler {
   submit(event) {
     event.preventDefault();
     const input = document.getElementById("message");
-    const message = input.value;
+    const txt = input.value;
     input.value = "";
-    const encoder = new TextEncoder();
-    const payloadBytes = encoder.encode(message);
+    const textMessage = this.TextMessage.create({
+      text: txt,
+    });
+    const message = this.Message.create({
+      from: "tom",
+      to: "marry",
+      text: textMessage,
+    });
+    const messageBuffer = this.Message.encode(message).finish();
 
     const msg = this.Sync.create({
-      payload: payloadBytes,
+      payload: messageBuffer,
     });
     const chat = this.Chat.create({
       sync: msg,

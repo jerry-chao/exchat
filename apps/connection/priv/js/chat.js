@@ -1648,12 +1648,27 @@ $root.Pong = (function() {
     return Pong;
 })();
 
+/**
+ * SyncType enum.
+ * @exports SyncType
+ * @enum {number}
+ * @property {number} SYNC_TYPE_MESSAGE=0 SYNC_TYPE_MESSAGE value
+ * @property {number} SYNC_TYPE_CONTACT=1 SYNC_TYPE_CONTACT value
+ */
+$root.SyncType = (function() {
+    var valuesById = {}, values = Object.create(valuesById);
+    values[valuesById[0] = "SYNC_TYPE_MESSAGE"] = 0;
+    values[valuesById[1] = "SYNC_TYPE_CONTACT"] = 1;
+    return values;
+})();
+
 $root.Sync = (function() {
 
     /**
      * Properties of a Sync.
      * @exports ISync
      * @interface ISync
+     * @property {SyncType|null} [type] Sync type
      * @property {Uint8Array|null} [payload] Sync payload
      */
 
@@ -1671,6 +1686,14 @@ $root.Sync = (function() {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * Sync type.
+     * @member {SyncType} type
+     * @memberof Sync
+     * @instance
+     */
+    Sync.prototype.type = 0;
 
     /**
      * Sync payload.
@@ -1704,8 +1727,10 @@ $root.Sync = (function() {
     Sync.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
+        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
         if (message.payload != null && Object.hasOwnProperty.call(message, "payload"))
-            writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.payload);
+            writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.payload);
         return writer;
     };
 
@@ -1741,6 +1766,10 @@ $root.Sync = (function() {
             var tag = reader.uint32();
             switch (tag >>> 3) {
             case 1: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 2: {
                     message.payload = reader.bytes();
                     break;
                 }
@@ -1779,6 +1808,14 @@ $root.Sync = (function() {
     Sync.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.type != null && message.hasOwnProperty("type"))
+            switch (message.type) {
+            default:
+                return "type: enum value expected";
+            case 0:
+            case 1:
+                break;
+            }
         if (message.payload != null && message.hasOwnProperty("payload"))
             if (!(message.payload && typeof message.payload.length === "number" || $util.isString(message.payload)))
                 return "payload: buffer expected";
@@ -1797,6 +1834,22 @@ $root.Sync = (function() {
         if (object instanceof $root.Sync)
             return object;
         var message = new $root.Sync();
+        switch (object.type) {
+        default:
+            if (typeof object.type === "number") {
+                message.type = object.type;
+                break;
+            }
+            break;
+        case "SYNC_TYPE_MESSAGE":
+        case 0:
+            message.type = 0;
+            break;
+        case "SYNC_TYPE_CONTACT":
+        case 1:
+            message.type = 1;
+            break;
+        }
         if (object.payload != null)
             if (typeof object.payload === "string")
                 $util.base64.decode(object.payload, message.payload = $util.newBuffer($util.base64.length(object.payload)), 0);
@@ -1818,7 +1871,8 @@ $root.Sync = (function() {
         if (!options)
             options = {};
         var object = {};
-        if (options.defaults)
+        if (options.defaults) {
+            object.type = options.enums === String ? "SYNC_TYPE_MESSAGE" : 0;
             if (options.bytes === String)
                 object.payload = "";
             else {
@@ -1826,6 +1880,9 @@ $root.Sync = (function() {
                 if (options.bytes !== Array)
                     object.payload = $util.newBuffer(object.payload);
             }
+        }
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = options.enums === String ? $root.SyncType[message.type] === undefined ? message.type : $root.SyncType[message.type] : message.type;
         if (message.payload != null && message.hasOwnProperty("payload"))
             object.payload = options.bytes === String ? $util.base64.encode(message.payload, 0, message.payload.length) : options.bytes === Array ? Array.prototype.slice.call(message.payload) : message.payload;
         return object;
@@ -1867,7 +1924,7 @@ $root.SyncAck = (function() {
      * @exports ISyncAck
      * @interface ISyncAck
      * @property {boolean|null} [success] SyncAck success
-     * @property {string|null} [message] SyncAck message
+     * @property {Uint8Array|null} [detail] SyncAck detail
      */
 
     /**
@@ -1894,12 +1951,12 @@ $root.SyncAck = (function() {
     SyncAck.prototype.success = false;
 
     /**
-     * SyncAck message.
-     * @member {string} message
+     * SyncAck detail.
+     * @member {Uint8Array} detail
      * @memberof SyncAck
      * @instance
      */
-    SyncAck.prototype.message = "";
+    SyncAck.prototype.detail = $util.newBuffer([]);
 
     /**
      * Creates a new SyncAck instance using the specified properties.
@@ -1927,8 +1984,8 @@ $root.SyncAck = (function() {
             writer = $Writer.create();
         if (message.success != null && Object.hasOwnProperty.call(message, "success"))
             writer.uint32(/* id 1, wireType 0 =*/8).bool(message.success);
-        if (message.message != null && Object.hasOwnProperty.call(message, "message"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+        if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
+            writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.detail);
         return writer;
     };
 
@@ -1968,7 +2025,7 @@ $root.SyncAck = (function() {
                     break;
                 }
             case 2: {
-                    message.message = reader.string();
+                    message.detail = reader.bytes();
                     break;
                 }
             default:
@@ -2009,9 +2066,9 @@ $root.SyncAck = (function() {
         if (message.success != null && message.hasOwnProperty("success"))
             if (typeof message.success !== "boolean")
                 return "success: boolean expected";
-        if (message.message != null && message.hasOwnProperty("message"))
-            if (!$util.isString(message.message))
-                return "message: string expected";
+        if (message.detail != null && message.hasOwnProperty("detail"))
+            if (!(message.detail && typeof message.detail.length === "number" || $util.isString(message.detail)))
+                return "detail: buffer expected";
         return null;
     };
 
@@ -2029,8 +2086,11 @@ $root.SyncAck = (function() {
         var message = new $root.SyncAck();
         if (object.success != null)
             message.success = Boolean(object.success);
-        if (object.message != null)
-            message.message = String(object.message);
+        if (object.detail != null)
+            if (typeof object.detail === "string")
+                $util.base64.decode(object.detail, message.detail = $util.newBuffer($util.base64.length(object.detail)), 0);
+            else if (object.detail.length >= 0)
+                message.detail = object.detail;
         return message;
     };
 
@@ -2049,12 +2109,18 @@ $root.SyncAck = (function() {
         var object = {};
         if (options.defaults) {
             object.success = false;
-            object.message = "";
+            if (options.bytes === String)
+                object.detail = "";
+            else {
+                object.detail = [];
+                if (options.bytes !== Array)
+                    object.detail = $util.newBuffer(object.detail);
+            }
         }
         if (message.success != null && message.hasOwnProperty("success"))
             object.success = message.success;
-        if (message.message != null && message.hasOwnProperty("message"))
-            object.message = message.message;
+        if (message.detail != null && message.hasOwnProperty("detail"))
+            object.detail = options.bytes === String ? $util.base64.encode(message.detail, 0, message.detail.length) : options.bytes === Array ? Array.prototype.slice.call(message.detail) : message.detail;
         return object;
     };
 

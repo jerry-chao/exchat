@@ -28,8 +28,16 @@ defmodule Connection.Client do
     request
   end
 
-  def handle_sync(%{result: :ok, state: state} = request, %Protos.Sync{payload: payload}) do
+  def handle_sync(%{result: :ok, state: state} = request, %Protos.Sync{
+        payload: payload,
+        type: :SYNC_TYPE_MESSAGE
+      }) do
     IO.puts("sync received: #{inspect(payload)}, room #{state.room}")
+    # handle sync message
+    # TODO add mock uid as from
+    message_response = Message.handle("jerry", payload)
+
+    IO.puts("message response: #{inspect(message_response)}")
 
     # send message to all clients in the same path
     sync = %Protos.Sync{payload: payload}
@@ -47,7 +55,7 @@ defmodule Connection.Client do
 
     response =
       %Protos.Chat{
-        sync_ack: %Protos.SyncAck{success: true, message: "send messsage success"}
+        sync_ack: %Protos.SyncAck{success: true, detail: message_response}
       }
 
     %{request | response: response}

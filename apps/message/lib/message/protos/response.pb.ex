@@ -1,4 +1,4 @@
-defmodule Protos.SyncAck do
+defmodule Protos.Response do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,33 +6,47 @@ defmodule Protos.SyncAck do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.DescriptorProto{
-      name: "SyncAck",
+      name: "Response",
       field: [
         %Google.Protobuf.FieldDescriptorProto{
-          name: "success",
+          name: "status",
           extendee: nil,
           number: 1,
           label: :LABEL_OPTIONAL,
-          type: :TYPE_BOOL,
-          type_name: nil,
+          type: :TYPE_ENUM,
+          type_name: ".Status",
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "success",
+          json_name: "status",
           proto3_optional: nil,
           __unknown_fields__: []
         },
         %Google.Protobuf.FieldDescriptorProto{
-          name: "detail",
+          name: "code",
           extendee: nil,
           number: 2,
           label: :LABEL_OPTIONAL,
-          type: :TYPE_BYTES,
+          type: :TYPE_ENUM,
+          type_name: ".Code",
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "code",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "reason",
+          extendee: nil,
+          number: 3,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_STRING,
           type_name: nil,
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "detail",
+          json_name: "reason",
           proto3_optional: nil,
           __unknown_fields__: []
         }
@@ -49,8 +63,9 @@ defmodule Protos.SyncAck do
     }
   end
 
-  field :success, 1, type: :bool
-  field :detail, 2, type: :bytes
+  field :status, 1, type: Protos.Status, enum: true
+  field :code, 2, type: Protos.Code, enum: true
+  field :reason, 3, type: :string
 
-  def transform_module(), do: Connection.Transform
+  def transform_module(), do: Message.Transform
 end

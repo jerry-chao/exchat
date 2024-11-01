@@ -1,0 +1,10 @@
+syntax = 'proto3';
+
+message AddContact {
+    string uid = 1;
+    string group = 2;
+}
+
+message Contact {
+    optional AddContact add = 1;
+}

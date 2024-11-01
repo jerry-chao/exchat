@@ -9,9 +9,23 @@ defmodule Protos.Sync do
       name: "Sync",
       field: [
         %Google.Protobuf.FieldDescriptorProto{
-          name: "payload",
+          name: "type",
           extendee: nil,
           number: 1,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_ENUM,
+          type_name: ".SyncType",
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "type",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "payload",
+          extendee: nil,
+          number: 2,
           label: :LABEL_OPTIONAL,
           type: :TYPE_BYTES,
           type_name: nil,
@@ -35,7 +49,8 @@ defmodule Protos.Sync do
     }
   end
 
-  field :payload, 1, type: :bytes
+  field :type, 1, type: Protos.SyncType, enum: true
+  field :payload, 2, type: :bytes
 
   def transform_module(), do: Connection.Transform
 end

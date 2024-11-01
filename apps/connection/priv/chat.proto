@@ -35,11 +35,17 @@ message Ping {
 message Pong {
 }
 
+enum SyncType {
+    SYNC_TYPE_MESSAGE = 0;
+    SYNC_TYPE_CONTACT = 1;
+}
+
 message Sync {
-   bytes payload = 1;
+   SyncType type = 1;
+   bytes payload = 2;
 }
 
 message SyncAck {
     bool success = 1;
-    string message = 2;
+    bytes detail = 2;
 }
