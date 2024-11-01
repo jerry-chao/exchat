@@ -42,7 +42,6 @@ class myWebsocketHandler {
       this.Message = messageProto.lookupType("Message");
       this.TextMessage = messageProto.lookupType("TextMessage");
       this.Response = messageProto.lookupType("Response");
-      // Once protobuf is loaded, setup socket
       this.setupSocket();
     } catch (error) {
       console.error("Error loading protobuf:", error);
@@ -61,15 +60,26 @@ class myWebsocketHandler {
     }
   }
 
+  login(event) {
+    event.preventDefault();
+    const uidInput = document.getElementById("uid");
+    this.uid = uidInput.value;
+    const passwordInput = document.getElementById("password");
+    this.password = passwordInput.value;
+    console.log(`uid: ${this.uid}, password: ${this.password}`);
+    this.sendProvision();
+    this.startPingInterval();
+    this.dispatchEvent("connected");
+  }
+
   setupSocket() {
     this.socket = new WebSocket("ws://localhost:4000/ws/chat");
 
     this.socket.addEventListener("close", () => {
       console.log("WebSocket disconnected ");
-      this.handleRetry();
+      // this.handleRetry();
     });
     this.socket.addEventListener("open", () => {
-      console.log("WebSocket connected successfully");
       this.handleOpen();
     });
     this.socket.addEventListener("message", async (event) => this.handleMessage(event));
@@ -136,7 +146,6 @@ class myWebsocketHandler {
     });
     this.startPingInterval();
     this.dispatchEvent("connected");
-    this.sendProvision();
   }
 
   handlePong() {
@@ -217,8 +226,8 @@ class myWebsocketHandler {
 
   sendProvision() {
     const connect = this.Connect.create({
-      uid: "zhangchao",
-      password: "123456",
+      uid: this.uid,
+      password: this.password,
     });
     const chat = this.Chat.create({
       connect: connect,
@@ -272,3 +281,5 @@ window.addEventListener("websocket:pong", (event) => {
 });
 
 document.getElementById("button").addEventListener("click", (event) => websocketClass.submit(event));
+
+document.getElementById("login-button").addEventListener("click", (event) => websocketClass.login(event));
