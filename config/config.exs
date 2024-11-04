@@ -17,6 +17,9 @@ config :exchat_web,
   ecto_repos: [Exchat.Repo],
   generators: [context_app: :exchat]
 
+config :message,
+  ecto_repos: [Message.Repo]
+
 # Configures the endpoint
 config :exchat_web, ExchatWeb.Endpoint,
   url: [host: "localhost"],

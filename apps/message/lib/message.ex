@@ -13,9 +13,24 @@ defmodule Message do
       %Protos.Response{status: :OK}
       |> handle_message(message)
       |> handle_text(uid, message.text)
+      |> store_message(message)
 
     IO.puts("response: #{inspect(response)}")
     Protos.Message.encode(%Protos.Message{response: response})
+  end
+
+  def store_message(response, nil) do
+    response
+  end
+
+  def store_message(%Protos.Response{status: status} = response, _message) when status != :OK do
+    response
+  end
+
+  def store_message(response, message) do
+    message = %Message.Messages{from: message.from, to: message.to, txt: message.text.text}
+    Message.Repo.insert(message)
+    response
   end
 
   def handle_message(response, %Protos.Message{from: nil}) do

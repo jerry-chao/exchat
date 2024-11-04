@@ -10,6 +10,7 @@ defmodule Message.Application do
     children = [
       # Starts a worker by calling: Message.Worker.start_link(arg)
       # {Message.Worker, arg}
+      Message.Repo
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
