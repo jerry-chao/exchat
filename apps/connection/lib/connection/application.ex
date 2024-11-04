@@ -13,7 +13,7 @@ defmodule Connection.Application do
       Plug.Cowboy.child_spec(
         scheme: :http,
         plug: Connection.Router,
-        options: [dispatch: dispatch(), port: 4000]
+        options: [dispatch: dispatch(), port: 4001]
       ),
       Registry.child_spec(
         keys: :duplicate,
@@ -31,8 +31,7 @@ defmodule Connection.Application do
     [
       {:_,
        [
-         {"/ws/[...]", Connection.SocketHandler, []},
-         {:_, Plug.Cowboy.Handler, {Connection.Router, []}}
+         {"/ws/[...]", Connection.SocketHandler, []}
        ]}
     ]
   end
