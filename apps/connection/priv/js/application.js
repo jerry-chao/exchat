@@ -106,7 +106,8 @@ class myWebsocketHandler {
       }
 
       if (decodedMessage.sync) {
-        show = this.handleSync(decodedMessage.sync);
+        const syncPayload = this.handleSync(decodedMessage.sync);
+        show = JSON.stringify(syncPayload);
       }
 
       const pTag = document.createElement("p");
@@ -118,8 +119,10 @@ class myWebsocketHandler {
   }
 
   handleSync(sync) {
-    console.log(`Received sync message result ${sync}`);
-    return sync.payload;
+    console.log(`Received sync message result`, sync);
+    const payload = this.Message.decode(sync.payload);
+    console.log("received message payload", payload);
+    return payload;
   }
 
   dispatchEvent(name, detail = {}) {
