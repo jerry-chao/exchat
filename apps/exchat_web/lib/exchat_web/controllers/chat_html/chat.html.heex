@@ -1,21 +1,52 @@
-<body>
-  <div id="login-form">
-    <form>
-      <label for="uid">User ID:</label>
-      <input id="uid" type="text" name="uid" />
-      <br /><br />
-      <label for="password">Password:</label>
-      <input id="password" type="text" name="password" />
-      <br /><br />
-      <input type="submit" value="Login" id="login-button" />
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
+    <div id="login-form" class="mb-8">
+      <form class="space-y-4">
+        <div>
+          <label for="uid" class="block text-sm font-medium text-gray-700">User ID:</label>
+          <input
+            id="uid"
+            type="text"
+            name="uid"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+        <div>
+          <input
+            type="submit"
+            value="Login"
+            id="login-button"
+            class="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          />
+        </div>
+      </form>
+    </div>
+    <main id="main" class="mb-8"></main>
+    <form class="space-y-4">
+      <div>
+        <input
+          id="message"
+          type="text"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
+      </div>
+      <div>
+        <input
+          type="submit"
+          value="Send"
+          id="button"
+          class="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        />
+      </div>
     </form>
   </div>
-  <main id="main"></main>
-  <br />
-  <form>
-    <input id="message" type="text" />
-    <br />
-    <br />
-    <input type="submit" value="send" id="button" />
-  </form>
 </body>
