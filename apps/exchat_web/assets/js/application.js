@@ -102,7 +102,9 @@ class myWebsocketHandler {
 
       if (decodedMessage.syncAck) {
         const syncResult = await this.handleSyncAck(decodedMessage.syncAck);
-        show = JSON.stringify(syncResult);
+        const input = document.getElementById("message");
+        show = JSON.stringify({"text": input.value, result: syncResult});
+        input.value = '';
       }
 
       if (decodedMessage.sync) {
@@ -112,7 +114,11 @@ class myWebsocketHandler {
 
       const pTag = document.createElement("p");
       pTag.innerHTML = show;
-      document.getElementById("main").append(pTag);
+      const mainElement = document.getElementById("main");
+      mainElement.append(pTag);
+      while (mainElement.childElementCount > 20) {
+        mainElement.removeChild(mainElement.firstChild);
+      }
     } catch (error) {
       console.error("Error processing message:", error);
     }
@@ -242,14 +248,14 @@ class myWebsocketHandler {
   submit(event) {
     event.preventDefault();
     const input = document.getElementById("message");
+    const target = document.getElementById("target");
     const txt = input.value;
-    input.value = "";
     const textMessage = this.TextMessage.create({
       text: txt,
     });
     const message = this.Message.create({
-      from: "tom",
-      to: "marry",
+      from: this.uid,
+      to: target.value,
       text: textMessage,
     });
     const messageBuffer = this.Message.encode(message).finish();
@@ -285,4 +291,4 @@ window.addEventListener("websocket:pong", (event) => {
 
 document.getElementById("button").addEventListener("click", (event) => websocketClass.submit(event));
 
-document.getElementById("login-button").addEventListener("click", (event) => websocketClass.login(event));
+document.getElementById("login-button").addEventListener("click", (event) => websocketClass.login(event))

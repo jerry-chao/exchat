@@ -32,20 +32,31 @@
     </div>
     <main id="main" class="mb-8"></main>
     <form class="space-y-4">
-      <div>
+      <div class="flex space-x-4">
+        <label for="target" class="flex-1 block text-sm font-medium text-gray-700">Target:</label>
         <input
-          id="message"
+          id="target"
           type="text"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          name="target"
+          class="flex-1 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>
-      <div>
-        <input
-          type="submit"
-          value="Send"
-          id="button"
-          class="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        />
+      <div class="flex space-x-4">
+        <div class="flex-1">
+          <input
+            id="message"
+            type="text"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+        <div>
+          <input
+            type="submit"
+            value="Send"
+            id="button"
+            class="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          />
+        </div>
       </div>
     </form>
   </div>
