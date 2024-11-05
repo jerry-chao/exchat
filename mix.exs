@@ -26,7 +26,8 @@ defmodule Exchat.Umbrella.MixProject do
   defp deps do
     [
       # Required to run "mix format" on ~H/.heex files from the umbrella root
-      {:phoenix_live_view, ">= 0.0.0"}
+      {:phoenix_live_view, ">= 0.0.0"},
+      {:logger_file_backend, "~> 0.0.14"}
     ]
   end
 

@@ -2,6 +2,7 @@ defmodule Message do
   @moduledoc """
   this is the module which handle request and response message from client.
   """
+  require Logger
 
   @doc """
   handle message from client and send response to client.
@@ -15,7 +16,7 @@ defmodule Message do
       |> handle_text(uid, message.text)
       |> store_message(message)
 
-    IO.puts("response: #{inspect(response)}")
+    Logger.info("response: #{inspect(response)}")
     Protos.Message.encode(%Protos.Message{response: response})
   end
 
@@ -58,7 +59,7 @@ defmodule Message do
   end
 
   def handle_text(response, uid, %Protos.TextMessage{text: txt}) do
-    IO.puts("handle uid #{uid} send text message: #{inspect(txt)}")
+    Logger.info("handle uid #{uid} send text message: #{inspect(txt)}")
     response
   end
 end

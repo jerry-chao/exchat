@@ -75,7 +75,17 @@ config :exchat_web, ExchatWeb.Endpoint,
 config :exchat_web, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger,
+  backends: [{LoggerFileBackend, :error_log}, {LoggerFileBackend, :info_log}]
+
+# configuration for the {LoggerFileBackend, :error_log} backend
+config :logger, :error_log,
+  path: "logs/error.log",
+  level: :error
+
+config :logger, :error_log,
+  path: "logs/info.log",
+  level: :info
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime

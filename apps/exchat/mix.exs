@@ -23,7 +23,7 @@ defmodule Exchat.MixProject do
   def application do
     [
       mod: {Exchat.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :logger_file_backend]
     ]
   end
 

@@ -1,4 +1,6 @@
 defmodule Connection.Client do
+  require Logger
+
   @doc """
   Handle the client connection, receive data from client and send data to client.
   """
@@ -32,19 +34,19 @@ defmodule Connection.Client do
         payload: payload,
         type: :SYNC_TYPE_MESSAGE
       }) do
-    IO.puts("sync received: #{inspect(payload)}, room #{state.room}")
+    Logger.info("sync received: #{inspect(payload)}, room #{state.room}")
     # handle sync message
     # TODO add mock uid as from
     message_response = Message.handle("jerry", payload)
 
-    IO.puts("message response: #{inspect(message_response)}")
+    Logger.info("message response: #{inspect(message_response)}")
 
     # send message to all clients in the same path
     sync = %Protos.Sync{payload: payload}
 
     Registry.Connection
     |> Registry.dispatch(state.room, fn entries ->
-      IO.puts("dispatch to all clients in the same room, entries: #{inspect(entries)}")
+      Logger.info("dispatch to all clients in the same room, entries: #{inspect(entries)}")
 
       for {pid, _} <- entries do
         if pid != self() do
@@ -69,7 +71,7 @@ defmodule Connection.Client do
         %{result: :ok, state: %{status: :connected} = state} = request,
         %Protos.Disconnect{reason: reason}
       ) do
-    IO.puts("disconnect handle disconnect #{inspect(reason)}")
+    Logger.info("disconnect handle disconnect #{inspect(reason)}")
 
     response =
       %Protos.Chat{
@@ -84,7 +86,7 @@ defmodule Connection.Client do
   end
 
   def handle_disconnect(%{result: error, state: state} = request, _disconnect) do
-    IO.puts("disconnect failed #{inspect(error)}")
+    Logger.info("disconnect failed #{inspect(error)}")
 
     response =
       %Protos.Chat{
@@ -98,13 +100,13 @@ defmodule Connection.Client do
         %{result: :ok, state: %{status: :waiting_provision} = state} = request,
         connect
       ) do
-    IO.puts("connect: #{inspect(connect)}")
+    Logger.info("connect: #{inspect(connect)}")
     uid = connect.uid
     password = connect.password
 
     case auth(uid, password) do
       true ->
-        IO.puts("auth success uid #{uid}, room: #{state.room}")
+        Logger.info("auth success uid #{uid}, room: #{state.room}")
 
         response =
           %Protos.Chat{
@@ -117,7 +119,7 @@ defmodule Connection.Client do
         %{request | response: response, state: %{state | status: :connected}}
 
       false ->
-        IO.puts("auth failed")
+        Logger.info("auth failed")
 
         response =
           %Protos.Chat{
