@@ -73,7 +73,7 @@ class myWebsocketHandler {
   }
 
   setupSocket() {
-    this.socket = new WebSocket("ws://localhost:4000/ws/chat");
+    this.socket = new WebSocket("ws://localhost:4001/ws/chat");
 
     this.socket.addEventListener("close", () => {
       console.log("WebSocket disconnected ");
