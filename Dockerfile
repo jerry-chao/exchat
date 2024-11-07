@@ -31,27 +31,14 @@ RUN mix local.hex --force && \
     mix local.rebar --force
 
 ENV SERVER="exchat_web"
-# set build ENV
 ENV MIX_ENV="prod"
 
 # install mix dependencies
-COPY mix.exs mix.lock ./
-RUN mix deps.get --only $MIX_ENV
-RUN mkdir config
-COPY config/config.exs config/${MIX_ENV}.exs config/
-RUN mix deps.compile
-
-COPY apps/${SERVER}/priv priv
-COPY apps/${SERVER}/lib lib
-COPY apps/${SERVER}/assets assets
-RUN mix assets.deploy
+COPY . /app/
+RUN rm -rf _build
+RUN mix deps.get
 RUN mix compile
-
-# Changes to config/runtime.exs don't require recompiling the code
-COPY config/runtime.exs config/
-
-COPY apps/${SERVER}/rel rel
-RUN mix release
+RUN mix release ${SERVER} --overwrite
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
@@ -84,5 +71,4 @@ USER nobody
 # advised to add an init process such as tini via `apt-get install`
 # above and adding an entrypoint. See https://github.com/krallin/tini for details
 # ENTRYPOINT ["/tini", "--"]
-
-CMD ["/app/bin/server"]
+ENTRYPOINT ["/bin/sh", "-c", "/app/bin/${SERVER}", "start_iex"]
