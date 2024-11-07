@@ -29,7 +29,8 @@ config :exchat_web, ExchatWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Exchat.PubSub,
-  live_view: [signing_salt: "EGTRJnVb"]
+  live_view: [signing_salt: "EGTRJnVb"],
+  server: true
 
 # Configure esbuild (the version is required)
 config :esbuild,

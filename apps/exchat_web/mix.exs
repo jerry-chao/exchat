@@ -56,7 +56,8 @@ defmodule ExchatWeb.MixProject do
       {:gettext, "~> 0.20"},
       {:exchat, in_umbrella: true},
       {:jason, "~> 1.2"},
-      {:bandit, "~> 1.2"}
+      {:bandit, "~> 1.2"},
+      {:logger_file_backend, "~> 0.0.14"}
     ]
   end
 

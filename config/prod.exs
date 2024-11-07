@@ -6,7 +6,7 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :exchat_web, ExchatWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  http: [ip: {127, 0, 0, 1}, port: 4000],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
@@ -14,3 +14,20 @@ config :logger, level: :info
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
+config :exchat, Exchat.Repo,
+  username: "postgres",
+  password: "postgres",
+  hostname: "postgres",
+  database: "exchat_dev",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+
+config :message, Message.Repo,
+  username: "postgres",
+  password: "postgres",
+  hostname: "postgres",
+  database: "message_dev",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10

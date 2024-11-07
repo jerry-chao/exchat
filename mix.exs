@@ -7,7 +7,24 @@ defmodule Exchat.Umbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: releases()
+    ]
+  end
+
+  def releases() do
+    [
+      exchat_web: [
+        applications: [
+          exchat_web: :permanent,
+        ],
+      ],
+      connection: [
+          applications: [
+            connection: :permanent,
+            message: :permanent,
+          ],
+        ]
     ]
   end
 
