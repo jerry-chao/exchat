@@ -16,15 +16,15 @@ defmodule Exchat.Umbrella.MixProject do
     [
       exchat_web: [
         applications: [
-          exchat_web: :permanent,
-        ],
+          exchat_web: :permanent
+        ]
       ],
       connection: [
-          applications: [
-            connection: :permanent,
-            message: :permanent,
-          ],
+        applications: [
+          connection: :permanent,
+          message: :permanent
         ]
+      ]
     ]
   end
 
