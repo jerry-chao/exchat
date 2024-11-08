@@ -1,10 +1,26 @@
-version: '3.8'
 services:
   exchat_web:
+    container_name: exchat_web
     image: exchat_web:0.1.0
+    command: "start"
     environment:
       - SECRET_KEY_BASE=pXDFtyzYZVjxsHyPf9K72GYRGhBojderEvyA/0usF16GNLe+mTfaKWL+mndQil8c
       - DATABASE_URL=ecto://postgres:postgres@172.17.1.8/exchat_dev
       - RELEASE_DISTRIBUTION=sname
       - RELEASE_NODE=exchat_web
-    command: top
+      - SERVER=exchat_web
+    ports:
+      - "4000:4000"
+
+  connection:
+    container_name: connection
+    image: connection:0.1.0
+    command: "start"
+    environment:
+      - SECRET_KEY_BASE=pXDFtyzYZVjxsHyPf9K72GYRGhBojderEvyA/0usF16GNLe+mTfaKWL+mndQil8c
+      - DATABASE_URL=ecto://postgres:postgres@172.17.1.8/message_dev
+      - RELEASE_DISTRIBUTION=sname
+      - RELEASE_NODE=connection
+      - SERVER=connection
+    ports:
+      - "4001:4001"

@@ -30,7 +30,7 @@ WORKDIR /app
 RUN mix local.hex --force && \
     mix local.rebar --force
 
-ENV SERVER="exchat_web"
+ARG SERVER="exchat_web"
 ENV MIX_ENV="prod"
 
 # install mix dependencies
@@ -60,7 +60,7 @@ RUN chown nobody /app
 
 # set runner ENV
 ENV MIX_ENV="prod"
-ENV SERVER="exchat_web"
+ARG SERVER="exchat_web"
 
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/${SERVER} ./
@@ -71,4 +71,4 @@ USER nobody
 # advised to add an init process such as tini via `apt-get install`
 # above and adding an entrypoint. See https://github.com/krallin/tini for details
 # ENTRYPOINT ["/tini", "--"]
-ENTRYPOINT ["/bin/sh", "-c", "/app/bin/${SERVER}", "start_iex"]
+ENTRYPOINT ["/bin/sh", "-c", "/app/bin/${SERVER} start"]
