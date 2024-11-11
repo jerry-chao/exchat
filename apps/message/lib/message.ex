@@ -12,7 +12,7 @@ defmodule Message do
 
     response =
       %Protos.Response{status: :OK}
-      |> handle_message(message)
+      |> handle_message(uid, message)
       |> handle_text(uid, message.text)
       |> store_message(message)
 
@@ -34,19 +34,19 @@ defmodule Message do
     response
   end
 
-  def handle_message(response, %Protos.Message{from: nil}) do
+  def handle_message(response, uid, %Protos.Message{from: from}) when uid != from do
     %Protos.Response{response | status: :ERROR, code: :CODE_INVALID_FROM}
   end
 
-  def handle_message(response, %Protos.Message{to: nil}) do
+  def handle_message(response, _uid, %Protos.Message{to: nil}) do
     %Protos.Response{response | status: :ERROR, code: :CODE_INVALID_TO}
   end
 
-  def handle_message(response, %Protos.Message{text: nil}) do
+  def handle_message(response, _uid, %Protos.Message{text: nil}) do
     %Protos.Response{response | status: :ERROR, code: :CODE_INVALID_EMPTY_MSG}
   end
 
-  def handle_message(response, _message) do
+  def handle_message(response, _uid, _message) do
     response
   end
 

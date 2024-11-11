@@ -37,7 +37,7 @@ defmodule Connection.Client do
     Logger.info("sync received: #{inspect(payload)}, room #{state.room}")
     # handle sync message
     # TODO add mock uid as from
-    message_response = Message.handle("jerry", payload)
+    message_response = Message.handle(state.uid, payload)
 
     Logger.info("message response: #{inspect(message_response)}")
 
@@ -116,7 +116,7 @@ defmodule Connection.Client do
         Registry.Connection
         |> Registry.register(state.room, [])
 
-        %{request | response: response, state: %{state | status: :connected}}
+        %{request | response: response, state: %{state | status: :connected} |> Map.put(:uid, uid)}
 
       false ->
         Logger.info("auth failed")
