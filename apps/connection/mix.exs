@@ -31,7 +31,8 @@ defmodule Connection.MixProject do
       {:plug, "~> 1.16"},
       {:plug_cowboy, "~> 2.7"},
       {:jason, "~> 1.4"},
-      {:message, in_umbrella: true}
+      {:message, in_umbrella: true},
+      {:exchat, in_umbrella: true}
       # {:sibling_app_in_umbrella, in_umbrella: true}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},

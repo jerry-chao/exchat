@@ -15,9 +15,25 @@ defmodule Message do
       |> handle_message(uid, message)
       |> handle_text(uid, message.text)
       |> store_message(message)
+      |> send_message(message)
 
     Logger.info("response: #{inspect(response)}")
     Protos.Message.encode(%Protos.Message{response: response})
+  end
+
+  def send_message(%Protos.Response{status: status} = response, _message) when status != :OK do
+    response
+  end
+
+  def send_message(response, nil) do
+    response
+  end
+
+  def send_message(response, message) do
+    Logger.info("send message to user : #{inspect(message.to)}, #{inspect(message)}")
+    sync = Protos.Message.encode(message)
+    Exchat.Session.send_message(message.to, sync)
+    response
   end
 
   def store_message(response, nil) do

@@ -41,20 +41,6 @@ defmodule Connection.Client do
 
     Logger.info("message response: #{inspect(message_response)}")
 
-    # send message to all clients in the same path
-    sync = %Protos.Sync{payload: payload}
-
-    Registry.Connection
-    |> Registry.dispatch(state.room, fn entries ->
-      Logger.info("dispatch to all clients in the same room, entries: #{inspect(entries)}")
-
-      for {pid, _} <- entries do
-        if pid != self() do
-          send(pid, Protos.Chat.encode(%Protos.Chat{sync: sync}))
-        end
-      end
-    end)
-
     response =
       %Protos.Chat{
         sync_ack: %Protos.SyncAck{success: true, detail: message_response}
@@ -114,9 +100,13 @@ defmodule Connection.Client do
           }
 
         Registry.Connection
-        |> Registry.register(state.room, [])
+        |> Registry.register(uid, [])
 
-        %{request | response: response, state: %{state | status: :connected} |> Map.put(:uid, uid)}
+        %{
+          request
+          | response: response,
+            state: %{state | status: :connected} |> Map.put(:uid, uid)
+        }
 
       false ->
         Logger.info("auth failed")
@@ -148,5 +138,18 @@ defmodule Connection.Client do
       nil -> false
       user -> user.password == password
     end
+  end
+
+  def send_message(to, sync) do
+    Registry.Connection
+    |> Registry.dispatch(to, fn entries ->
+      Logger.info("dispatch to all clients for specific user, entries: #{inspect(entries)}")
+
+      for {pid, _} <- entries do
+        if pid != self() do
+          send(pid, Protos.Chat.encode(%Protos.Chat{sync: sync}))
+        end
+    end
+    end)
   end
 end

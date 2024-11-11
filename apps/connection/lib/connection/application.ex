@@ -17,6 +17,11 @@ defmodule Connection.Application do
       ),
       Registry.child_spec(
         keys: :duplicate,
+        name: Registry.Room,
+        partitions: System.schedulers_online()
+      ),
+      Registry.child_spec(
+        keys: :duplicate,
         name: Registry.Connection
       )
     ]

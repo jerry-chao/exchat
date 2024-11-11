@@ -40,8 +40,9 @@ defmodule Connection.SocketHandler do
   end
 
   @impl true
-  def websocket_info(info, state) do
-    Logger.info("websocket_info: send data to client #{inspect(info)}")
-    {:reply, {:binary, info}, state}
+  def websocket_info({:message, sync}, state) do
+    Logger.info("websocket_info: send data to client #{inspect(sync)}")
+    sync = %Protos.Sync{payload: sync, type: :SYNC_TYPE_MESSAGE}
+    {:reply, {:binary, Protos.Chat.encode(%Protos.Chat{sync: sync})}, state}
   end
 end
