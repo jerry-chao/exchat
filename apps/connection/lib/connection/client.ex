@@ -143,11 +143,10 @@ defmodule Connection.Client do
     %{request | response: response, state: state}
   end
 
-  def auth("zhangchao", "123456") do
-    true
-  end
-
-  def auth(_, _) do
-    false
+  def auth(uid, password) do
+    case Exchat.Account.get_user_by_uid!(uid) do
+      nil -> false
+      user -> user.password == password
+    end
   end
 end

@@ -13,7 +13,7 @@ defmodule Connection.Application do
       Plug.Cowboy.child_spec(
         scheme: :http,
         plug: Connection.Router,
-        options: [dispatch: dispatch(), port: 4001]
+        options: [dispatch: dispatch(), port: Application.get_env(:connection, :port, 4001)]
       ),
       Registry.child_spec(
         keys: :duplicate,
