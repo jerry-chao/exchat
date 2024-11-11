@@ -149,7 +149,7 @@ defmodule Connection.Client do
         if pid != self() do
           send(pid, Protos.Chat.encode(%Protos.Chat{sync: sync}))
         end
-    end
+      end
     end)
   end
 end
