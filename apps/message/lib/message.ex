@@ -6,6 +6,8 @@ defmodule Message do
 
   @doc """
   handle message from client and send response to client.
+
+  ## Examples
   """
   def handle(uid, message) do
     message = Protos.Message.decode(message)
