@@ -64,6 +64,8 @@ defmodule Connection.Client do
         conn_ack: %Protos.ConnAck{success: true, message: "you are logined"}
       }
 
+    Exchat.Session.unregister(state.uid)
+
     %{request | response: response, state: %{state | status: :connected}}
   end
 
@@ -99,8 +101,7 @@ defmodule Connection.Client do
             conn_ack: %Protos.ConnAck{success: true, message: "you are logined"}
           }
 
-        Registry.Connection
-        |> Registry.register(uid, [])
+        Exchat.Session.register(uid, [])
 
         %{
           request
