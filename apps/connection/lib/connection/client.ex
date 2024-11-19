@@ -116,7 +116,15 @@ defmodule Connection.Client do
             conn_ack: %Protos.ConnAck{success: false, message: "auth failed"}
           }
 
-        %{request | result: :error, response: response, state: %{state | status: :auth_failed}}
+        # close the connection
+        Process.send(self(), {:close, :auth_failed}, [])
+
+        %{
+          request
+          | result: :error,
+            response: response,
+            state: %{state | status: :auth_failed} |> Map.put(:uid, uid)
+        }
     end
   end
 
