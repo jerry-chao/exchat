@@ -7,9 +7,12 @@ defmodule Exchat.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies) || []
+
     children = [
       Exchat.Repo,
-      {DNSCluster, query: Application.get_env(:exchat, :dns_cluster_query) || :ignore},
+      # {DNSCluster, query: Application.get_env(:exchat, :dns_cluster_query) || :ignore},
+      {Cluster.Supervisor, [topologies, [name: Exchat.ClusterSupervisor]]},
       {Phoenix.PubSub, name: Exchat.PubSub}
       # Start a worker by calling: Exchat.Worker.start_link(arg)
       # {Exchat.Worker, arg}
