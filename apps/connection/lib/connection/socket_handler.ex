@@ -40,6 +40,11 @@ defmodule Connection.SocketHandler do
   end
 
   @impl true
+  def websocket_info({:close, reason}, state) do
+    Logger.info("websocket_info: close connection user #{state.uid}, reason: #{reason}")
+    {[{:shutdown_reason, reason}], state}
+  end
+
   def websocket_info({:message, sync}, state) do
     Logger.info("websocket_info: send data to client #{inspect(sync)}")
     sync = %Protos.Sync{payload: sync, type: :SYNC_TYPE_MESSAGE}
