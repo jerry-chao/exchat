@@ -18,7 +18,7 @@ defmodule ExchatWeb do
   """
 
   def static_paths,
-    do: ~w(assets fonts images favicon.ico robots.txt chat.proto contact.proto message.proto)
+    do: ~w(assets fonts images favicon.ico robots.txt connection.proto meta.proto contact.proto message.proto)
 
   def router do
     quote do

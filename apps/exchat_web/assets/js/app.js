@@ -19,7 +19,8 @@
 import "phoenix_html"
 import "./protobuf.min.js"
 import "./application.js"
-import "./chat.js"
+import "./connection.js"
+import "./meta.js"
 import "./message.js"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"

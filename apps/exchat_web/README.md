@@ -1,18 +1,13 @@
 # ExchatWeb
 
-To start your Phoenix server:
+## Client
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server`
+生成js的protobuf的js文件
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```bash
+pbjs -t static-module -w commonjs -o assets/js/connection.js priv/static/connection.proto
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+pbjs -t static-module -w commonjs -o assets/js/meta.js priv/static/meta.proto
 
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+pbjs -t static-module -w commonjs -o assets/js/message.js priv/static/message.proto
+```

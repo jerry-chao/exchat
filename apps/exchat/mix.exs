@@ -41,7 +41,8 @@ defmodule Exchat.MixProject do
       {:phoenix_pubsub, "~> 2.1"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.2"}
+      {:jason, "~> 1.2"},
+      {:logger_file_backend, "~> 0.0.14"}
     ]
   end
 

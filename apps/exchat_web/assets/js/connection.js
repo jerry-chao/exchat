@@ -1,7 +1,7 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
 "use strict";
 
-var $protobuf = require("./protobuf.min.js");
+var $protobuf = require("protobufjs/minimal");
 
 // Common aliases
 var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
@@ -21,8 +21,8 @@ $root.Chat = (function() {
      * @property {IDisconnectAck|null} [disconnectAck] Chat disconnectAck
      * @property {IPing|null} [ping] Chat ping
      * @property {IPong|null} [pong] Chat pong
-     * @property {ISync|null} [sync] Chat sync
-     * @property {ISyncAck|null} [syncAck] Chat syncAck
+     * @property {ISend|null} [send] Chat send
+     * @property {ISendAck|null} [sendAck] Chat sendAck
      */
 
     /**
@@ -89,20 +89,20 @@ $root.Chat = (function() {
     Chat.prototype.pong = null;
 
     /**
-     * Chat sync.
-     * @member {ISync|null|undefined} sync
+     * Chat send.
+     * @member {ISend|null|undefined} send
      * @memberof Chat
      * @instance
      */
-    Chat.prototype.sync = null;
+    Chat.prototype.send = null;
 
     /**
-     * Chat syncAck.
-     * @member {ISyncAck|null|undefined} syncAck
+     * Chat sendAck.
+     * @member {ISendAck|null|undefined} sendAck
      * @memberof Chat
      * @instance
      */
-    Chat.prototype.syncAck = null;
+    Chat.prototype.sendAck = null;
 
     /**
      * Creates a new Chat instance using the specified properties.
@@ -140,10 +140,10 @@ $root.Chat = (function() {
             $root.Ping.encode(message.ping, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         if (message.pong != null && Object.hasOwnProperty.call(message, "pong"))
             $root.Pong.encode(message.pong, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        if (message.sync != null && Object.hasOwnProperty.call(message, "sync"))
-            $root.Sync.encode(message.sync, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-        if (message.syncAck != null && Object.hasOwnProperty.call(message, "syncAck"))
-            $root.SyncAck.encode(message.syncAck, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+        if (message.send != null && Object.hasOwnProperty.call(message, "send"))
+            $root.Send.encode(message.send, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+        if (message.sendAck != null && Object.hasOwnProperty.call(message, "sendAck"))
+            $root.SendAck.encode(message.sendAck, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
         return writer;
     };
 
@@ -203,11 +203,11 @@ $root.Chat = (function() {
                     break;
                 }
             case 7: {
-                    message.sync = $root.Sync.decode(reader, reader.uint32());
+                    message.send = $root.Send.decode(reader, reader.uint32());
                     break;
                 }
             case 8: {
-                    message.syncAck = $root.SyncAck.decode(reader, reader.uint32());
+                    message.sendAck = $root.SendAck.decode(reader, reader.uint32());
                     break;
                 }
             default:
@@ -275,15 +275,15 @@ $root.Chat = (function() {
             if (error)
                 return "pong." + error;
         }
-        if (message.sync != null && message.hasOwnProperty("sync")) {
-            var error = $root.Sync.verify(message.sync);
+        if (message.send != null && message.hasOwnProperty("send")) {
+            var error = $root.Send.verify(message.send);
             if (error)
-                return "sync." + error;
+                return "send." + error;
         }
-        if (message.syncAck != null && message.hasOwnProperty("syncAck")) {
-            var error = $root.SyncAck.verify(message.syncAck);
+        if (message.sendAck != null && message.hasOwnProperty("sendAck")) {
+            var error = $root.SendAck.verify(message.sendAck);
             if (error)
-                return "syncAck." + error;
+                return "sendAck." + error;
         }
         return null;
     };
@@ -330,15 +330,15 @@ $root.Chat = (function() {
                 throw TypeError(".Chat.pong: object expected");
             message.pong = $root.Pong.fromObject(object.pong);
         }
-        if (object.sync != null) {
-            if (typeof object.sync !== "object")
-                throw TypeError(".Chat.sync: object expected");
-            message.sync = $root.Sync.fromObject(object.sync);
+        if (object.send != null) {
+            if (typeof object.send !== "object")
+                throw TypeError(".Chat.send: object expected");
+            message.send = $root.Send.fromObject(object.send);
         }
-        if (object.syncAck != null) {
-            if (typeof object.syncAck !== "object")
-                throw TypeError(".Chat.syncAck: object expected");
-            message.syncAck = $root.SyncAck.fromObject(object.syncAck);
+        if (object.sendAck != null) {
+            if (typeof object.sendAck !== "object")
+                throw TypeError(".Chat.sendAck: object expected");
+            message.sendAck = $root.SendAck.fromObject(object.sendAck);
         }
         return message;
     };
@@ -363,8 +363,8 @@ $root.Chat = (function() {
             object.disconnectAck = null;
             object.ping = null;
             object.pong = null;
-            object.sync = null;
-            object.syncAck = null;
+            object.send = null;
+            object.sendAck = null;
         }
         if (message.connect != null && message.hasOwnProperty("connect"))
             object.connect = $root.Connect.toObject(message.connect, options);
@@ -378,10 +378,10 @@ $root.Chat = (function() {
             object.ping = $root.Ping.toObject(message.ping, options);
         if (message.pong != null && message.hasOwnProperty("pong"))
             object.pong = $root.Pong.toObject(message.pong, options);
-        if (message.sync != null && message.hasOwnProperty("sync"))
-            object.sync = $root.Sync.toObject(message.sync, options);
-        if (message.syncAck != null && message.hasOwnProperty("syncAck"))
-            object.syncAck = $root.SyncAck.toObject(message.syncAck, options);
+        if (message.send != null && message.hasOwnProperty("send"))
+            object.send = $root.Send.toObject(message.send, options);
+        if (message.sendAck != null && message.hasOwnProperty("sendAck"))
+            object.sendAck = $root.SendAck.toObject(message.sendAck, options);
         return object;
     };
 
@@ -1648,39 +1648,25 @@ $root.Pong = (function() {
     return Pong;
 })();
 
-/**
- * SyncType enum.
- * @exports SyncType
- * @enum {number}
- * @property {number} SYNC_TYPE_MESSAGE=0 SYNC_TYPE_MESSAGE value
- * @property {number} SYNC_TYPE_CONTACT=1 SYNC_TYPE_CONTACT value
- */
-$root.SyncType = (function() {
-    var valuesById = {}, values = Object.create(valuesById);
-    values[valuesById[0] = "SYNC_TYPE_MESSAGE"] = 0;
-    values[valuesById[1] = "SYNC_TYPE_CONTACT"] = 1;
-    return values;
-})();
-
-$root.Sync = (function() {
+$root.Send = (function() {
 
     /**
-     * Properties of a Sync.
-     * @exports ISync
-     * @interface ISync
-     * @property {SyncType|null} [type] Sync type
-     * @property {Uint8Array|null} [payload] Sync payload
+     * Properties of a Send.
+     * @exports ISend
+     * @interface ISend
+     * @property {number|Long|null} [seqId] Send seqId
+     * @property {Uint8Array|null} [payload] Send payload
      */
 
     /**
-     * Constructs a new Sync.
-     * @exports Sync
-     * @classdesc Represents a Sync.
-     * @implements ISync
+     * Constructs a new Send.
+     * @exports Send
+     * @classdesc Represents a Send.
+     * @implements ISend
      * @constructor
-     * @param {ISync=} [properties] Properties to set
+     * @param {ISend=} [properties] Properties to set
      */
-    function Sync(properties) {
+    function Send(properties) {
         if (properties)
             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -1688,85 +1674,85 @@ $root.Sync = (function() {
     }
 
     /**
-     * Sync type.
-     * @member {SyncType} type
-     * @memberof Sync
+     * Send seqId.
+     * @member {number|Long} seqId
+     * @memberof Send
      * @instance
      */
-    Sync.prototype.type = 0;
+    Send.prototype.seqId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
     /**
-     * Sync payload.
+     * Send payload.
      * @member {Uint8Array} payload
-     * @memberof Sync
+     * @memberof Send
      * @instance
      */
-    Sync.prototype.payload = $util.newBuffer([]);
+    Send.prototype.payload = $util.newBuffer([]);
 
     /**
-     * Creates a new Sync instance using the specified properties.
+     * Creates a new Send instance using the specified properties.
      * @function create
-     * @memberof Sync
+     * @memberof Send
      * @static
-     * @param {ISync=} [properties] Properties to set
-     * @returns {Sync} Sync instance
+     * @param {ISend=} [properties] Properties to set
+     * @returns {Send} Send instance
      */
-    Sync.create = function create(properties) {
-        return new Sync(properties);
+    Send.create = function create(properties) {
+        return new Send(properties);
     };
 
     /**
-     * Encodes the specified Sync message. Does not implicitly {@link Sync.verify|verify} messages.
+     * Encodes the specified Send message. Does not implicitly {@link Send.verify|verify} messages.
      * @function encode
-     * @memberof Sync
+     * @memberof Send
      * @static
-     * @param {ISync} message Sync message or plain object to encode
+     * @param {ISend} message Send message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Sync.encode = function encode(message, writer) {
+    Send.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+        if (message.seqId != null && Object.hasOwnProperty.call(message, "seqId"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.seqId);
         if (message.payload != null && Object.hasOwnProperty.call(message, "payload"))
             writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.payload);
         return writer;
     };
 
     /**
-     * Encodes the specified Sync message, length delimited. Does not implicitly {@link Sync.verify|verify} messages.
+     * Encodes the specified Send message, length delimited. Does not implicitly {@link Send.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof Sync
+     * @memberof Send
      * @static
-     * @param {ISync} message Sync message or plain object to encode
+     * @param {ISend} message Send message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Sync.encodeDelimited = function encodeDelimited(message, writer) {
+    Send.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a Sync message from the specified reader or buffer.
+     * Decodes a Send message from the specified reader or buffer.
      * @function decode
-     * @memberof Sync
+     * @memberof Send
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {Sync} Sync
+     * @returns {Send} Send
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Sync.decode = function decode(reader, length) {
+    Send.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Sync();
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Send();
         while (reader.pos < end) {
             var tag = reader.uint32();
             switch (tag >>> 3) {
             case 1: {
-                    message.type = reader.int32();
+                    message.seqId = reader.int64();
                     break;
                 }
             case 2: {
@@ -1782,40 +1768,35 @@ $root.Sync = (function() {
     };
 
     /**
-     * Decodes a Sync message from the specified reader or buffer, length delimited.
+     * Decodes a Send message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof Sync
+     * @memberof Send
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Sync} Sync
+     * @returns {Send} Send
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Sync.decodeDelimited = function decodeDelimited(reader) {
+    Send.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a Sync message.
+     * Verifies a Send message.
      * @function verify
-     * @memberof Sync
+     * @memberof Send
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    Sync.verify = function verify(message) {
+    Send.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.type != null && message.hasOwnProperty("type"))
-            switch (message.type) {
-            default:
-                return "type: enum value expected";
-            case 0:
-            case 1:
-                break;
-            }
+        if (message.seqId != null && message.hasOwnProperty("seqId"))
+            if (!$util.isInteger(message.seqId) && !(message.seqId && $util.isInteger(message.seqId.low) && $util.isInteger(message.seqId.high)))
+                return "seqId: integer|Long expected";
         if (message.payload != null && message.hasOwnProperty("payload"))
             if (!(message.payload && typeof message.payload.length === "number" || $util.isString(message.payload)))
                 return "payload: buffer expected";
@@ -1823,33 +1804,26 @@ $root.Sync = (function() {
     };
 
     /**
-     * Creates a Sync message from a plain object. Also converts values to their respective internal types.
+     * Creates a Send message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof Sync
+     * @memberof Send
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {Sync} Sync
+     * @returns {Send} Send
      */
-    Sync.fromObject = function fromObject(object) {
-        if (object instanceof $root.Sync)
+    Send.fromObject = function fromObject(object) {
+        if (object instanceof $root.Send)
             return object;
-        var message = new $root.Sync();
-        switch (object.type) {
-        default:
-            if (typeof object.type === "number") {
-                message.type = object.type;
-                break;
-            }
-            break;
-        case "SYNC_TYPE_MESSAGE":
-        case 0:
-            message.type = 0;
-            break;
-        case "SYNC_TYPE_CONTACT":
-        case 1:
-            message.type = 1;
-            break;
-        }
+        var message = new $root.Send();
+        if (object.seqId != null)
+            if ($util.Long)
+                (message.seqId = $util.Long.fromValue(object.seqId)).unsigned = false;
+            else if (typeof object.seqId === "string")
+                message.seqId = parseInt(object.seqId, 10);
+            else if (typeof object.seqId === "number")
+                message.seqId = object.seqId;
+            else if (typeof object.seqId === "object")
+                message.seqId = new $util.LongBits(object.seqId.low >>> 0, object.seqId.high >>> 0).toNumber();
         if (object.payload != null)
             if (typeof object.payload === "string")
                 $util.base64.decode(object.payload, message.payload = $util.newBuffer($util.base64.length(object.payload)), 0);
@@ -1859,20 +1833,24 @@ $root.Sync = (function() {
     };
 
     /**
-     * Creates a plain object from a Sync message. Also converts values to other types if specified.
+     * Creates a plain object from a Send message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof Sync
+     * @memberof Send
      * @static
-     * @param {Sync} message Sync
+     * @param {Send} message Send
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    Sync.toObject = function toObject(message, options) {
+    Send.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         var object = {};
         if (options.defaults) {
-            object.type = options.enums === String ? "SYNC_TYPE_MESSAGE" : 0;
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.seqId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.seqId = options.longs === String ? "0" : 0;
             if (options.bytes === String)
                 object.payload = "";
             else {
@@ -1881,61 +1859,65 @@ $root.Sync = (function() {
                     object.payload = $util.newBuffer(object.payload);
             }
         }
-        if (message.type != null && message.hasOwnProperty("type"))
-            object.type = options.enums === String ? $root.SyncType[message.type] === undefined ? message.type : $root.SyncType[message.type] : message.type;
+        if (message.seqId != null && message.hasOwnProperty("seqId"))
+            if (typeof message.seqId === "number")
+                object.seqId = options.longs === String ? String(message.seqId) : message.seqId;
+            else
+                object.seqId = options.longs === String ? $util.Long.prototype.toString.call(message.seqId) : options.longs === Number ? new $util.LongBits(message.seqId.low >>> 0, message.seqId.high >>> 0).toNumber() : message.seqId;
         if (message.payload != null && message.hasOwnProperty("payload"))
             object.payload = options.bytes === String ? $util.base64.encode(message.payload, 0, message.payload.length) : options.bytes === Array ? Array.prototype.slice.call(message.payload) : message.payload;
         return object;
     };
 
     /**
-     * Converts this Sync to JSON.
+     * Converts this Send to JSON.
      * @function toJSON
-     * @memberof Sync
+     * @memberof Send
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    Sync.prototype.toJSON = function toJSON() {
+    Send.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
     /**
-     * Gets the default type url for Sync
+     * Gets the default type url for Send
      * @function getTypeUrl
-     * @memberof Sync
+     * @memberof Send
      * @static
      * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns {string} The default type url
      */
-    Sync.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+    Send.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
         if (typeUrlPrefix === undefined) {
             typeUrlPrefix = "type.googleapis.com";
         }
-        return typeUrlPrefix + "/Sync";
+        return typeUrlPrefix + "/Send";
     };
 
-    return Sync;
+    return Send;
 })();
 
-$root.SyncAck = (function() {
+$root.SendAck = (function() {
 
     /**
-     * Properties of a SyncAck.
-     * @exports ISyncAck
-     * @interface ISyncAck
-     * @property {boolean|null} [success] SyncAck success
-     * @property {Uint8Array|null} [detail] SyncAck detail
+     * Properties of a SendAck.
+     * @exports ISendAck
+     * @interface ISendAck
+     * @property {number|Long|null} [seqId] SendAck seqId
+     * @property {boolean|null} [success] SendAck success
+     * @property {Uint8Array|null} [detail] SendAck detail
      */
 
     /**
-     * Constructs a new SyncAck.
-     * @exports SyncAck
-     * @classdesc Represents a SyncAck.
-     * @implements ISyncAck
+     * Constructs a new SendAck.
+     * @exports SendAck
+     * @classdesc Represents a SendAck.
+     * @implements ISendAck
      * @constructor
-     * @param {ISyncAck=} [properties] Properties to set
+     * @param {ISendAck=} [properties] Properties to set
      */
-    function SyncAck(properties) {
+    function SendAck(properties) {
         if (properties)
             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -1943,88 +1925,102 @@ $root.SyncAck = (function() {
     }
 
     /**
-     * SyncAck success.
+     * SendAck seqId.
+     * @member {number|Long} seqId
+     * @memberof SendAck
+     * @instance
+     */
+    SendAck.prototype.seqId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+    /**
+     * SendAck success.
      * @member {boolean} success
-     * @memberof SyncAck
+     * @memberof SendAck
      * @instance
      */
-    SyncAck.prototype.success = false;
+    SendAck.prototype.success = false;
 
     /**
-     * SyncAck detail.
+     * SendAck detail.
      * @member {Uint8Array} detail
-     * @memberof SyncAck
+     * @memberof SendAck
      * @instance
      */
-    SyncAck.prototype.detail = $util.newBuffer([]);
+    SendAck.prototype.detail = $util.newBuffer([]);
 
     /**
-     * Creates a new SyncAck instance using the specified properties.
+     * Creates a new SendAck instance using the specified properties.
      * @function create
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
-     * @param {ISyncAck=} [properties] Properties to set
-     * @returns {SyncAck} SyncAck instance
+     * @param {ISendAck=} [properties] Properties to set
+     * @returns {SendAck} SendAck instance
      */
-    SyncAck.create = function create(properties) {
-        return new SyncAck(properties);
+    SendAck.create = function create(properties) {
+        return new SendAck(properties);
     };
 
     /**
-     * Encodes the specified SyncAck message. Does not implicitly {@link SyncAck.verify|verify} messages.
+     * Encodes the specified SendAck message. Does not implicitly {@link SendAck.verify|verify} messages.
      * @function encode
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
-     * @param {ISyncAck} message SyncAck message or plain object to encode
+     * @param {ISendAck} message SendAck message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    SyncAck.encode = function encode(message, writer) {
+    SendAck.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
+        if (message.seqId != null && Object.hasOwnProperty.call(message, "seqId"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int64(message.seqId);
         if (message.success != null && Object.hasOwnProperty.call(message, "success"))
-            writer.uint32(/* id 1, wireType 0 =*/8).bool(message.success);
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.success);
         if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
-            writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.detail);
+            writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.detail);
         return writer;
     };
 
     /**
-     * Encodes the specified SyncAck message, length delimited. Does not implicitly {@link SyncAck.verify|verify} messages.
+     * Encodes the specified SendAck message, length delimited. Does not implicitly {@link SendAck.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
-     * @param {ISyncAck} message SyncAck message or plain object to encode
+     * @param {ISendAck} message SendAck message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    SyncAck.encodeDelimited = function encodeDelimited(message, writer) {
+    SendAck.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a SyncAck message from the specified reader or buffer.
+     * Decodes a SendAck message from the specified reader or buffer.
      * @function decode
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {SyncAck} SyncAck
+     * @returns {SendAck} SendAck
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    SyncAck.decode = function decode(reader, length) {
+    SendAck.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.SyncAck();
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.SendAck();
         while (reader.pos < end) {
             var tag = reader.uint32();
             switch (tag >>> 3) {
             case 1: {
-                    message.success = reader.bool();
+                    message.seqId = reader.int64();
                     break;
                 }
             case 2: {
+                    message.success = reader.bool();
+                    break;
+                }
+            case 3: {
                     message.detail = reader.bytes();
                     break;
                 }
@@ -2037,32 +2033,35 @@ $root.SyncAck = (function() {
     };
 
     /**
-     * Decodes a SyncAck message from the specified reader or buffer, length delimited.
+     * Decodes a SendAck message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {SyncAck} SyncAck
+     * @returns {SendAck} SendAck
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    SyncAck.decodeDelimited = function decodeDelimited(reader) {
+    SendAck.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a SyncAck message.
+     * Verifies a SendAck message.
      * @function verify
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    SyncAck.verify = function verify(message) {
+    SendAck.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.seqId != null && message.hasOwnProperty("seqId"))
+            if (!$util.isInteger(message.seqId) && !(message.seqId && $util.isInteger(message.seqId.low) && $util.isInteger(message.seqId.high)))
+                return "seqId: integer|Long expected";
         if (message.success != null && message.hasOwnProperty("success"))
             if (typeof message.success !== "boolean")
                 return "success: boolean expected";
@@ -2073,17 +2072,26 @@ $root.SyncAck = (function() {
     };
 
     /**
-     * Creates a SyncAck message from a plain object. Also converts values to their respective internal types.
+     * Creates a SendAck message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {SyncAck} SyncAck
+     * @returns {SendAck} SendAck
      */
-    SyncAck.fromObject = function fromObject(object) {
-        if (object instanceof $root.SyncAck)
+    SendAck.fromObject = function fromObject(object) {
+        if (object instanceof $root.SendAck)
             return object;
-        var message = new $root.SyncAck();
+        var message = new $root.SendAck();
+        if (object.seqId != null)
+            if ($util.Long)
+                (message.seqId = $util.Long.fromValue(object.seqId)).unsigned = false;
+            else if (typeof object.seqId === "string")
+                message.seqId = parseInt(object.seqId, 10);
+            else if (typeof object.seqId === "number")
+                message.seqId = object.seqId;
+            else if (typeof object.seqId === "object")
+                message.seqId = new $util.LongBits(object.seqId.low >>> 0, object.seqId.high >>> 0).toNumber();
         if (object.success != null)
             message.success = Boolean(object.success);
         if (object.detail != null)
@@ -2095,19 +2103,24 @@ $root.SyncAck = (function() {
     };
 
     /**
-     * Creates a plain object from a SyncAck message. Also converts values to other types if specified.
+     * Creates a plain object from a SendAck message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
-     * @param {SyncAck} message SyncAck
+     * @param {SendAck} message SendAck
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    SyncAck.toObject = function toObject(message, options) {
+    SendAck.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         var object = {};
         if (options.defaults) {
+            if ($util.Long) {
+                var long = new $util.Long(0, 0, false);
+                object.seqId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.seqId = options.longs === String ? "0" : 0;
             object.success = false;
             if (options.bytes === String)
                 object.detail = "";
@@ -2117,6 +2130,11 @@ $root.SyncAck = (function() {
                     object.detail = $util.newBuffer(object.detail);
             }
         }
+        if (message.seqId != null && message.hasOwnProperty("seqId"))
+            if (typeof message.seqId === "number")
+                object.seqId = options.longs === String ? String(message.seqId) : message.seqId;
+            else
+                object.seqId = options.longs === String ? $util.Long.prototype.toString.call(message.seqId) : options.longs === Number ? new $util.LongBits(message.seqId.low >>> 0, message.seqId.high >>> 0).toNumber() : message.seqId;
         if (message.success != null && message.hasOwnProperty("success"))
             object.success = message.success;
         if (message.detail != null && message.hasOwnProperty("detail"))
@@ -2125,32 +2143,32 @@ $root.SyncAck = (function() {
     };
 
     /**
-     * Converts this SyncAck to JSON.
+     * Converts this SendAck to JSON.
      * @function toJSON
-     * @memberof SyncAck
+     * @memberof SendAck
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    SyncAck.prototype.toJSON = function toJSON() {
+    SendAck.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
     /**
-     * Gets the default type url for SyncAck
+     * Gets the default type url for SendAck
      * @function getTypeUrl
-     * @memberof SyncAck
+     * @memberof SendAck
      * @static
      * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns {string} The default type url
      */
-    SyncAck.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+    SendAck.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
         if (typeUrlPrefix === undefined) {
             typeUrlPrefix = "type.googleapis.com";
         }
-        return typeUrlPrefix + "/SyncAck";
+        return typeUrlPrefix + "/SendAck";
     };
 
-    return SyncAck;
+    return SendAck;
 })();
 
 module.exports = $root;

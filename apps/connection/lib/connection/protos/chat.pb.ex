@@ -93,30 +93,30 @@ defmodule Protos.Chat do
           __unknown_fields__: []
         },
         %Google.Protobuf.FieldDescriptorProto{
-          name: "sync",
+          name: "send",
           extendee: nil,
           number: 7,
           label: :LABEL_OPTIONAL,
           type: :TYPE_MESSAGE,
-          type_name: ".Sync",
+          type_name: ".Send",
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "sync",
+          json_name: "send",
           proto3_optional: nil,
           __unknown_fields__: []
         },
         %Google.Protobuf.FieldDescriptorProto{
-          name: "sync_ack",
+          name: "send_ack",
           extendee: nil,
           number: 8,
           label: :LABEL_OPTIONAL,
           type: :TYPE_MESSAGE,
-          type_name: ".SyncAck",
+          type_name: ".SendAck",
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "syncAck",
+          json_name: "sendAck",
           proto3_optional: nil,
           __unknown_fields__: []
         }
@@ -139,8 +139,8 @@ defmodule Protos.Chat do
   field :disconnect_ack, 4, type: Protos.DisconnectAck, json_name: "disconnectAck"
   field :ping, 5, type: Protos.Ping
   field :pong, 6, type: Protos.Pong
-  field :sync, 7, type: Protos.Sync
-  field :sync_ack, 8, type: Protos.SyncAck, json_name: "syncAck"
+  field :send, 7, type: Protos.Send
+  field :send_ack, 8, type: Protos.SendAck, json_name: "sendAck"
 
   def transform_module(), do: Connection.Transform
 end

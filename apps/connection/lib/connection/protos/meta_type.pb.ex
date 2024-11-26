@@ -1,4 +1,4 @@
-defmodule Protos.SyncType do
+defmodule Protos.MetaType do
   @moduledoc false
 
   use Protobuf, enum: true, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,23 +6,17 @@ defmodule Protos.SyncType do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.EnumDescriptorProto{
-      name: "SyncType",
+      name: "MetaType",
       value: [
         %Google.Protobuf.EnumValueDescriptorProto{
-          name: "SYNC",
+          name: "TYPE_MESSAGE",
           number: 0,
           options: nil,
           __unknown_fields__: []
         },
         %Google.Protobuf.EnumValueDescriptorProto{
-          name: "NOTICE",
+          name: "TYPE_CONTACT",
           number: 1,
-          options: nil,
-          __unknown_fields__: []
-        },
-        %Google.Protobuf.EnumValueDescriptorProto{
-          name: "UNREAD",
-          number: 2,
           options: nil,
           __unknown_fields__: []
         }
@@ -34,7 +28,6 @@ defmodule Protos.SyncType do
     }
   end
 
-  field :SYNC, 0
-  field :NOTICE, 1
-  field :UNREAD, 2
+  field :TYPE_MESSAGE, 0
+  field :TYPE_CONTACT, 1
 end

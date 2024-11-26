@@ -30,20 +30,17 @@ defmodule Connection.Client do
     request
   end
 
-  def handle_sync(%{result: :ok, state: state} = request, %Protos.Sync{
-        payload: payload,
-        type: :SYNC_TYPE_MESSAGE
+  def handle_sync(%{result: :ok, state: state} = request, %Protos.Send{
+        payload: payload
       }) do
-    Logger.info("sync received: #{inspect(payload)}, room #{state.room}")
-    # handle sync message
-    # TODO add mock uid as from
-    message_response = Message.handle(state.uid, payload)
+    Logger.info("sync received: #{inspect(payload)}")
+    message_response = Connection.Meta.handle(state.uid, payload)
 
     Logger.info("message response: #{inspect(message_response)}")
 
     response =
       %Protos.Chat{
-        sync_ack: %Protos.SyncAck{success: true, detail: message_response}
+        send_ack: %Protos.SendAck{success: true, detail: message_response}
       }
 
     %{request | response: response}
@@ -156,7 +153,7 @@ defmodule Connection.Client do
 
       for {pid, _} <- entries do
         if pid != self() do
-          send(pid, Protos.Chat.encode(%Protos.Chat{sync: sync}))
+          send(pid, Protos.Chat.encode(%Protos.Chat{send: sync}))
         end
       end
     end)
