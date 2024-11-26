@@ -36,7 +36,7 @@ $root.Sync = (function() {
      * @property {string|null} [queue] Sync queue
      * @property {number|Long|null} [key] Sync key
      * @property {boolean|null} [isLast] Sync isLast
-     * @property {IResponse|null} [response] Sync response
+     * @property {ISyncResponse|null} [response] Sync response
      * @property {Array.<IMeta>|null} [metas] Sync metas
      * @property {Array.<string>|null} [queues] Sync queues
      */
@@ -100,7 +100,7 @@ $root.Sync = (function() {
 
     /**
      * Sync response.
-     * @member {IResponse|null|undefined} response
+     * @member {ISyncResponse|null|undefined} response
      * @memberof Sync
      * @instance
      */
@@ -166,7 +166,7 @@ $root.Sync = (function() {
         if (message.isLast != null && Object.hasOwnProperty.call(message, "isLast"))
             writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isLast);
         if (message.response != null && Object.hasOwnProperty.call(message, "response"))
-            $root.Response.encode(message.response, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+            $root.SyncResponse.encode(message.response, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
         if (message.metas != null && message.metas.length)
             for (var i = 0; i < message.metas.length; ++i)
                 $root.Meta.encode(message.metas[i], writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
@@ -228,7 +228,7 @@ $root.Sync = (function() {
                     break;
                 }
             case 6: {
-                    message.response = $root.Response.decode(reader, reader.uint32());
+                    message.response = $root.SyncResponse.decode(reader, reader.uint32());
                     break;
                 }
             case 7: {
@@ -303,7 +303,7 @@ $root.Sync = (function() {
         if (message.response != null && message.hasOwnProperty("response")) {
             properties._response = 1;
             {
-                var error = $root.Response.verify(message.response);
+                var error = $root.SyncResponse.verify(message.response);
                 if (error)
                     return "response." + error;
             }
@@ -384,7 +384,7 @@ $root.Sync = (function() {
         if (object.response != null) {
             if (typeof object.response !== "object")
                 throw TypeError(".Sync.response: object expected");
-            message.response = $root.Response.fromObject(object.response);
+            message.response = $root.SyncResponse.fromObject(object.response);
         }
         if (object.metas) {
             if (!Array.isArray(object.metas))
@@ -455,7 +455,7 @@ $root.Sync = (function() {
         if (message.isLast != null && message.hasOwnProperty("isLast"))
             object.isLast = message.isLast;
         if (message.response != null && message.hasOwnProperty("response")) {
-            object.response = $root.Response.toObject(message.response, options);
+            object.response = $root.SyncResponse.toObject(message.response, options);
             if (options.oneofs)
                 object._response = "response";
         }
@@ -502,13 +502,13 @@ $root.Sync = (function() {
 })();
 
 /**
- * Status enum.
- * @exports Status
+ * SyncStatus enum.
+ * @exports SyncStatus
  * @enum {number}
  * @property {number} OK=0 OK value
  * @property {number} ERROR=1 ERROR value
  */
-$root.Status = (function() {
+$root.SyncStatus = (function() {
     var valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "OK"] = 0;
     values[valuesById[1] = "ERROR"] = 1;
@@ -516,14 +516,14 @@ $root.Status = (function() {
 })();
 
 /**
- * Code enum.
- * @exports Code
+ * SyncCode enum.
+ * @exports SyncCode
  * @enum {number}
  * @property {number} CODE_OK=0 CODE_OK value
  * @property {number} CODE_QUEUE_IS_EMPTY=1 CODE_QUEUE_IS_EMPTY value
  * @property {number} CODE_SYNC_TOO_QUICK=2 CODE_SYNC_TOO_QUICK value
  */
-$root.Code = (function() {
+$root.SyncCode = (function() {
     var valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "CODE_OK"] = 0;
     values[valuesById[1] = "CODE_QUEUE_IS_EMPTY"] = 1;
@@ -531,26 +531,26 @@ $root.Code = (function() {
     return values;
 })();
 
-$root.Response = (function() {
+$root.SyncResponse = (function() {
 
     /**
-     * Properties of a Response.
-     * @exports IResponse
-     * @interface IResponse
-     * @property {Status|null} [status] Response status
-     * @property {Code|null} [code] Response code
-     * @property {string|null} [reason] Response reason
+     * Properties of a SyncResponse.
+     * @exports ISyncResponse
+     * @interface ISyncResponse
+     * @property {SyncStatus|null} [status] SyncResponse status
+     * @property {SyncCode|null} [code] SyncResponse code
+     * @property {string|null} [reason] SyncResponse reason
      */
 
     /**
-     * Constructs a new Response.
-     * @exports Response
-     * @classdesc Represents a Response.
-     * @implements IResponse
+     * Constructs a new SyncResponse.
+     * @exports SyncResponse
+     * @classdesc Represents a SyncResponse.
+     * @implements ISyncResponse
      * @constructor
-     * @param {IResponse=} [properties] Properties to set
+     * @param {ISyncResponse=} [properties] Properties to set
      */
-    function Response(properties) {
+    function SyncResponse(properties) {
         if (properties)
             for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -558,51 +558,51 @@ $root.Response = (function() {
     }
 
     /**
-     * Response status.
-     * @member {Status} status
-     * @memberof Response
+     * SyncResponse status.
+     * @member {SyncStatus} status
+     * @memberof SyncResponse
      * @instance
      */
-    Response.prototype.status = 0;
+    SyncResponse.prototype.status = 0;
 
     /**
-     * Response code.
-     * @member {Code} code
-     * @memberof Response
+     * SyncResponse code.
+     * @member {SyncCode} code
+     * @memberof SyncResponse
      * @instance
      */
-    Response.prototype.code = 0;
+    SyncResponse.prototype.code = 0;
 
     /**
-     * Response reason.
+     * SyncResponse reason.
      * @member {string} reason
-     * @memberof Response
+     * @memberof SyncResponse
      * @instance
      */
-    Response.prototype.reason = "";
+    SyncResponse.prototype.reason = "";
 
     /**
-     * Creates a new Response instance using the specified properties.
+     * Creates a new SyncResponse instance using the specified properties.
      * @function create
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
-     * @param {IResponse=} [properties] Properties to set
-     * @returns {Response} Response instance
+     * @param {ISyncResponse=} [properties] Properties to set
+     * @returns {SyncResponse} SyncResponse instance
      */
-    Response.create = function create(properties) {
-        return new Response(properties);
+    SyncResponse.create = function create(properties) {
+        return new SyncResponse(properties);
     };
 
     /**
-     * Encodes the specified Response message. Does not implicitly {@link Response.verify|verify} messages.
+     * Encodes the specified SyncResponse message. Does not implicitly {@link SyncResponse.verify|verify} messages.
      * @function encode
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
-     * @param {IResponse} message Response message or plain object to encode
+     * @param {ISyncResponse} message SyncResponse message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Response.encode = function encode(message, writer) {
+    SyncResponse.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
         if (message.status != null && Object.hasOwnProperty.call(message, "status"))
@@ -615,33 +615,33 @@ $root.Response = (function() {
     };
 
     /**
-     * Encodes the specified Response message, length delimited. Does not implicitly {@link Response.verify|verify} messages.
+     * Encodes the specified SyncResponse message, length delimited. Does not implicitly {@link SyncResponse.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
-     * @param {IResponse} message Response message or plain object to encode
+     * @param {ISyncResponse} message SyncResponse message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Response.encodeDelimited = function encodeDelimited(message, writer) {
+    SyncResponse.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a Response message from the specified reader or buffer.
+     * Decodes a SyncResponse message from the specified reader or buffer.
      * @function decode
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {Response} Response
+     * @returns {SyncResponse} SyncResponse
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Response.decode = function decode(reader, length) {
+    SyncResponse.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Response();
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.SyncResponse();
         while (reader.pos < end) {
             var tag = reader.uint32();
             switch (tag >>> 3) {
@@ -666,30 +666,30 @@ $root.Response = (function() {
     };
 
     /**
-     * Decodes a Response message from the specified reader or buffer, length delimited.
+     * Decodes a SyncResponse message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Response} Response
+     * @returns {SyncResponse} SyncResponse
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Response.decodeDelimited = function decodeDelimited(reader) {
+    SyncResponse.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a Response message.
+     * Verifies a SyncResponse message.
      * @function verify
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    Response.verify = function verify(message) {
+    SyncResponse.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.status != null && message.hasOwnProperty("status"))
@@ -716,17 +716,17 @@ $root.Response = (function() {
     };
 
     /**
-     * Creates a Response message from a plain object. Also converts values to their respective internal types.
+     * Creates a SyncResponse message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {Response} Response
+     * @returns {SyncResponse} SyncResponse
      */
-    Response.fromObject = function fromObject(object) {
-        if (object instanceof $root.Response)
+    SyncResponse.fromObject = function fromObject(object) {
+        if (object instanceof $root.SyncResponse)
             return object;
-        var message = new $root.Response();
+        var message = new $root.SyncResponse();
         switch (object.status) {
         default:
             if (typeof object.status === "number") {
@@ -769,15 +769,15 @@ $root.Response = (function() {
     };
 
     /**
-     * Creates a plain object from a Response message. Also converts values to other types if specified.
+     * Creates a plain object from a SyncResponse message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
-     * @param {Response} message Response
+     * @param {SyncResponse} message SyncResponse
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    Response.toObject = function toObject(message, options) {
+    SyncResponse.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         var object = {};
@@ -787,41 +787,41 @@ $root.Response = (function() {
             object.reason = "";
         }
         if (message.status != null && message.hasOwnProperty("status"))
-            object.status = options.enums === String ? $root.Status[message.status] === undefined ? message.status : $root.Status[message.status] : message.status;
+            object.status = options.enums === String ? $root.SyncStatus[message.status] === undefined ? message.status : $root.SyncStatus[message.status] : message.status;
         if (message.code != null && message.hasOwnProperty("code"))
-            object.code = options.enums === String ? $root.Code[message.code] === undefined ? message.code : $root.Code[message.code] : message.code;
+            object.code = options.enums === String ? $root.SyncCode[message.code] === undefined ? message.code : $root.SyncCode[message.code] : message.code;
         if (message.reason != null && message.hasOwnProperty("reason"))
             object.reason = message.reason;
         return object;
     };
 
     /**
-     * Converts this Response to JSON.
+     * Converts this SyncResponse to JSON.
      * @function toJSON
-     * @memberof Response
+     * @memberof SyncResponse
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    Response.prototype.toJSON = function toJSON() {
+    SyncResponse.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
     /**
-     * Gets the default type url for Response
+     * Gets the default type url for SyncResponse
      * @function getTypeUrl
-     * @memberof Response
+     * @memberof SyncResponse
      * @static
      * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns {string} The default type url
      */
-    Response.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+    SyncResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
         if (typeUrlPrefix === undefined) {
             typeUrlPrefix = "type.googleapis.com";
         }
-        return typeUrlPrefix + "/Response";
+        return typeUrlPrefix + "/SyncResponse";
     };
 
-    return Response;
+    return SyncResponse;
 })();
 
 /**
