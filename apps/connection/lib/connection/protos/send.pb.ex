@@ -1,4 +1,4 @@
-defmodule Protos.TextMessage do
+defmodule Protos.Send do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,19 +6,33 @@ defmodule Protos.TextMessage do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.DescriptorProto{
-      name: "TextMessage",
+      name: "Send",
       field: [
         %Google.Protobuf.FieldDescriptorProto{
-          name: "text",
+          name: "seq_id",
           extendee: nil,
           number: 1,
           label: :LABEL_OPTIONAL,
-          type: :TYPE_STRING,
+          type: :TYPE_INT64,
           type_name: nil,
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "text",
+          json_name: "seqId",
+          proto3_optional: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "payload",
+          extendee: nil,
+          number: 2,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_BYTES,
+          type_name: nil,
+          default_value: nil,
+          options: nil,
+          oneof_index: nil,
+          json_name: "payload",
           proto3_optional: nil,
           __unknown_fields__: []
         }
@@ -35,7 +49,8 @@ defmodule Protos.TextMessage do
     }
   end
 
-  field :text, 1, type: :string
+  field :seq_id, 1, type: :int64, json_name: "seqId"
+  field :payload, 2, type: :bytes
 
-  def transform_module(), do: Message.Transform
+  def transform_module(), do: Connection.Transform
 end

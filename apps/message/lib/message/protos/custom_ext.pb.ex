@@ -1,4 +1,4 @@
-defmodule Protos.TextMessage do
+defmodule Protos.CustomExt do
   @moduledoc false
 
   use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,19 +6,19 @@ defmodule Protos.TextMessage do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.DescriptorProto{
-      name: "TextMessage",
+      name: "CustomExt",
       field: [
         %Google.Protobuf.FieldDescriptorProto{
-          name: "text",
+          name: "kvs",
           extendee: nil,
           number: 1,
-          label: :LABEL_OPTIONAL,
-          type: :TYPE_STRING,
-          type_name: nil,
+          label: :LABEL_REPEATED,
+          type: :TYPE_MESSAGE,
+          type_name: ".KV",
           default_value: nil,
           options: nil,
           oneof_index: nil,
-          json_name: "text",
+          json_name: "kvs",
           proto3_optional: nil,
           __unknown_fields__: []
         }
@@ -35,7 +35,7 @@ defmodule Protos.TextMessage do
     }
   end
 
-  field :text, 1, type: :string
+  field :kvs, 1, repeated: true, type: Protos.KV
 
   def transform_module(), do: Message.Transform
 end

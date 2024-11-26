@@ -30,13 +30,18 @@ class myWebsocketHandler {
   async init() {
     try {
       // Load protobuf definitions
-      const root = await protobuf.load("chat.proto");
+      const root = await protobuf.load("connection.proto");
       this.Chat = root.lookupType("Chat");
       this.Connect = root.lookupType("Connect");
       this.Ping = root.lookupType("Ping");
       this.Pong = root.lookupType("Pong");
+      this.Send = root.lookupType("Send");
+      this.SendAck = root.lookupType("SendAck");
+
+      const metaProto = await protobuf.load("meta.proto");
       this.Sync = root.lookupType("Sync");
       this.SyncAck = root.lookupType("SyncAck");
+      this.Meta = root.lookupType("Meta");
 
       const messageProto = await protobuf.load("message.proto");
       this.Message = messageProto.lookupType("Message");

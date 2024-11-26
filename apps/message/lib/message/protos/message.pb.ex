@@ -51,17 +51,45 @@ defmodule Protos.Message do
           __unknown_fields__: []
         },
         %Google.Protobuf.FieldDescriptorProto{
-          name: "response",
+          name: "img",
           extendee: nil,
           number: 4,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".ImgMessage",
+          default_value: nil,
+          options: nil,
+          oneof_index: 1,
+          json_name: "img",
+          proto3_optional: true,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "ext",
+          extendee: nil,
+          number: 5,
+          label: :LABEL_OPTIONAL,
+          type: :TYPE_MESSAGE,
+          type_name: ".CustomExt",
+          default_value: nil,
+          options: nil,
+          oneof_index: 2,
+          json_name: "ext",
+          proto3_optional: true,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.FieldDescriptorProto{
+          name: "response",
+          extendee: nil,
+          number: 6,
           label: :LABEL_OPTIONAL,
           type: :TYPE_MESSAGE,
           type_name: ".Response",
           default_value: nil,
           options: nil,
-          oneof_index: nil,
+          oneof_index: 3,
           json_name: "response",
-          proto3_optional: nil,
+          proto3_optional: true,
           __unknown_fields__: []
         }
       ],
@@ -71,7 +99,18 @@ defmodule Protos.Message do
       extension: [],
       options: nil,
       oneof_decl: [
-        %Google.Protobuf.OneofDescriptorProto{name: "_text", options: nil, __unknown_fields__: []}
+        %Google.Protobuf.OneofDescriptorProto{
+          name: "_text",
+          options: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.OneofDescriptorProto{name: "_img", options: nil, __unknown_fields__: []},
+        %Google.Protobuf.OneofDescriptorProto{name: "_ext", options: nil, __unknown_fields__: []},
+        %Google.Protobuf.OneofDescriptorProto{
+          name: "_response",
+          options: nil,
+          __unknown_fields__: []
+        }
       ],
       reserved_range: [],
       reserved_name: [],
@@ -82,7 +121,9 @@ defmodule Protos.Message do
   field :from, 1, type: :string
   field :to, 2, type: :string
   field :text, 3, proto3_optional: true, type: Protos.TextMessage
-  field :response, 4, type: Protos.Response
+  field :img, 4, proto3_optional: true, type: Protos.ImgMessage
+  field :ext, 5, proto3_optional: true, type: Protos.CustomExt
+  field :response, 6, proto3_optional: true, type: Protos.Response
 
   def transform_module(), do: Message.Transform
 end

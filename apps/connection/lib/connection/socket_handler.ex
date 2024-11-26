@@ -45,9 +45,20 @@ defmodule Connection.SocketHandler do
     {[{:shutdown_reason, reason}], state}
   end
 
-  def websocket_info({:message, sync}, state) do
-    Logger.info("websocket_info: send data to client #{inspect(sync)}")
-    sync = %Protos.Sync{payload: sync, type: :SYNC_TYPE_MESSAGE}
-    {:reply, {:binary, Protos.Chat.encode(%Protos.Chat{sync: sync})}, state}
+  def websocket_info({:message, message}, state) do
+    Logger.info("websocket_info: send data to client #{inspect(message)}")
+    meta_id = :os.system_time(:millisecond) * 1000 + (:rand.uniform(1000) - 1)
+
+    meta = %Protos.Meta{
+      id: meta_id,
+      type: :TYPE_MESSAGE,
+      payload: message,
+      is_store: true,
+      is_sync_from: false
+    }
+
+    seq_id = :os.system_time(:millisecond) * 1000 + (:rand.uniform(1000) - 1)
+    sync = %Protos.Sync{seq: seq_id, type: :SYNC, is_last: true, metas: [meta]}
+    {:reply, {:binary, Protos.Chat.encode(%Protos.Chat{send: sync})}, state}
   end
 end

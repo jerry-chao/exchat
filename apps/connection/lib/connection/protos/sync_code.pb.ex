@@ -1,4 +1,4 @@
-defmodule Protos.Code do
+defmodule Protos.SyncCode do
   @moduledoc false
 
   use Protobuf, enum: true, syntax: :proto3, protoc_gen_elixir_version: "0.13.0"
@@ -6,7 +6,7 @@ defmodule Protos.Code do
   def descriptor do
     # credo:disable-for-next-line
     %Google.Protobuf.EnumDescriptorProto{
-      name: "Code",
+      name: "SyncCode",
       value: [
         %Google.Protobuf.EnumValueDescriptorProto{
           name: "CODE_OK",
@@ -15,26 +15,14 @@ defmodule Protos.Code do
           __unknown_fields__: []
         },
         %Google.Protobuf.EnumValueDescriptorProto{
-          name: "CODE_INVALID_FROM",
+          name: "CODE_QUEUE_IS_EMPTY",
           number: 1,
           options: nil,
           __unknown_fields__: []
         },
         %Google.Protobuf.EnumValueDescriptorProto{
-          name: "CODE_INVALID_TO",
+          name: "CODE_SYNC_TOO_QUICK",
           number: 2,
-          options: nil,
-          __unknown_fields__: []
-        },
-        %Google.Protobuf.EnumValueDescriptorProto{
-          name: "CODE_INVALID_EMPTY_MSG",
-          number: 3,
-          options: nil,
-          __unknown_fields__: []
-        },
-        %Google.Protobuf.EnumValueDescriptorProto{
-          name: "CODE_NO_PERMISION_IMG",
-          number: 4,
           options: nil,
           __unknown_fields__: []
         }
@@ -47,8 +35,6 @@ defmodule Protos.Code do
   end
 
   field :CODE_OK, 0
-  field :CODE_INVALID_FROM, 1
-  field :CODE_INVALID_TO, 2
-  field :CODE_INVALID_EMPTY_MSG, 3
-  field :CODE_NO_PERMISION_IMG, 4
+  field :CODE_QUEUE_IS_EMPTY, 1
+  field :CODE_SYNC_TOO_QUICK, 2
 end

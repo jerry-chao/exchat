@@ -7,8 +7,8 @@ message Chat {
     DisconnectAck disconnect_ack = 4;
     Ping ping = 5;
     Pong pong = 6;
-    Sync sync = 7;
-    SyncAck sync_ack = 8;
+    Send send = 7;
+    SendAck send_ack = 8;
 }
 message Connect {
     string uid = 1;
@@ -35,17 +35,13 @@ message Ping {
 message Pong {
 }
 
-enum SyncType {
-    SYNC_TYPE_MESSAGE = 0;
-    SYNC_TYPE_CONTACT = 1;
-}
-
-message Sync {
-   SyncType type = 1;
+message Send {
+   int64 seq_id = 1;
    bytes payload = 2;
 }
 
-message SyncAck {
-    bool success = 1;
-    bytes detail = 2;
+message SendAck {
+    int64 seq_id = 1;
+    bool success = 2;
+    bytes detail = 3;
 }

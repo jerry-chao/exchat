@@ -1,0 +1,48 @@
+syntax = 'proto3';
+
+enum SyncType {
+    SYNC = 0;
+    NOTICE = 1;
+    UNREAD = 2;
+}
+
+message Sync {
+    int64 seq = 1;
+    SyncType type = 2;
+    string queue = 3;
+    int64 key = 4;
+    bool is_last = 5;
+    optional SyncResponse response = 6;
+    repeated Meta metas = 7;
+    repeated string queues = 8;
+}
+
+enum SyncStatus {
+    OK = 0;
+    ERROR = 1;
+}
+
+enum SyncCode {
+    CODE_OK = 0;
+    CODE_QUEUE_IS_EMPTY = 1;
+    CODE_SYNC_TOO_QUICK = 2;
+}
+
+message SyncResponse {
+    SyncStatus status = 1;
+    SyncCode code = 2;
+    string reason = 3;
+}
+
+enum MetaType {
+    TYPE_MESSAGE = 0;
+    TYPE_CONTACT = 1;
+}
+
+message Meta {
+   int64 id = 1;
+   MetaType type = 2;
+   bytes payload = 3;
+   bytes is_store = 4;
+   bytes is_sync_from = 5;
+}

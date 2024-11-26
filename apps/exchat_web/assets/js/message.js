@@ -1,7 +1,7 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
 "use strict";
 
-var $protobuf = require("./protobuf.min.js");
+var $protobuf = require("protobufjs/minimal");
 
 // Common aliases
 var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
@@ -18,6 +18,8 @@ $root.Message = (function() {
      * @property {string|null} [from] Message from
      * @property {string|null} [to] Message to
      * @property {ITextMessage|null} [text] Message text
+     * @property {IImgMessage|null} [img] Message img
+     * @property {ICustomExt|null} [ext] Message ext
      * @property {IResponse|null} [response] Message response
      */
 
@@ -61,6 +63,22 @@ $root.Message = (function() {
     Message.prototype.text = null;
 
     /**
+     * Message img.
+     * @member {IImgMessage|null|undefined} img
+     * @memberof Message
+     * @instance
+     */
+    Message.prototype.img = null;
+
+    /**
+     * Message ext.
+     * @member {ICustomExt|null|undefined} ext
+     * @memberof Message
+     * @instance
+     */
+    Message.prototype.ext = null;
+
+    /**
      * Message response.
      * @member {IResponse|null|undefined} response
      * @memberof Message
@@ -74,6 +92,24 @@ $root.Message = (function() {
     // Virtual OneOf for proto3 optional field
     Object.defineProperty(Message.prototype, "_text", {
         get: $util.oneOfGetter($oneOfFields = ["text"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(Message.prototype, "_img", {
+        get: $util.oneOfGetter($oneOfFields = ["img"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(Message.prototype, "_ext", {
+        get: $util.oneOfGetter($oneOfFields = ["ext"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
+    // Virtual OneOf for proto3 optional field
+    Object.defineProperty(Message.prototype, "_response", {
+        get: $util.oneOfGetter($oneOfFields = ["response"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -107,8 +143,12 @@ $root.Message = (function() {
             writer.uint32(/* id 2, wireType 2 =*/18).string(message.to);
         if (message.text != null && Object.hasOwnProperty.call(message, "text"))
             $root.TextMessage.encode(message.text, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.img != null && Object.hasOwnProperty.call(message, "img"))
+            $root.ImgMessage.encode(message.img, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.ext != null && Object.hasOwnProperty.call(message, "ext"))
+            $root.CustomExt.encode(message.ext, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         if (message.response != null && Object.hasOwnProperty.call(message, "response"))
-            $root.Response.encode(message.response, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            $root.Response.encode(message.response, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
         return writer;
     };
 
@@ -156,6 +196,14 @@ $root.Message = (function() {
                     break;
                 }
             case 4: {
+                    message.img = $root.ImgMessage.decode(reader, reader.uint32());
+                    break;
+                }
+            case 5: {
+                    message.ext = $root.CustomExt.decode(reader, reader.uint32());
+                    break;
+                }
+            case 6: {
                     message.response = $root.Response.decode(reader, reader.uint32());
                     break;
                 }
@@ -209,10 +257,29 @@ $root.Message = (function() {
                     return "text." + error;
             }
         }
+        if (message.img != null && message.hasOwnProperty("img")) {
+            properties._img = 1;
+            {
+                var error = $root.ImgMessage.verify(message.img);
+                if (error)
+                    return "img." + error;
+            }
+        }
+        if (message.ext != null && message.hasOwnProperty("ext")) {
+            properties._ext = 1;
+            {
+                var error = $root.CustomExt.verify(message.ext);
+                if (error)
+                    return "ext." + error;
+            }
+        }
         if (message.response != null && message.hasOwnProperty("response")) {
-            var error = $root.Response.verify(message.response);
-            if (error)
-                return "response." + error;
+            properties._response = 1;
+            {
+                var error = $root.Response.verify(message.response);
+                if (error)
+                    return "response." + error;
+            }
         }
         return null;
     };
@@ -238,6 +305,16 @@ $root.Message = (function() {
                 throw TypeError(".Message.text: object expected");
             message.text = $root.TextMessage.fromObject(object.text);
         }
+        if (object.img != null) {
+            if (typeof object.img !== "object")
+                throw TypeError(".Message.img: object expected");
+            message.img = $root.ImgMessage.fromObject(object.img);
+        }
+        if (object.ext != null) {
+            if (typeof object.ext !== "object")
+                throw TypeError(".Message.ext: object expected");
+            message.ext = $root.CustomExt.fromObject(object.ext);
+        }
         if (object.response != null) {
             if (typeof object.response !== "object")
                 throw TypeError(".Message.response: object expected");
@@ -262,7 +339,6 @@ $root.Message = (function() {
         if (options.defaults) {
             object.from = "";
             object.to = "";
-            object.response = null;
         }
         if (message.from != null && message.hasOwnProperty("from"))
             object.from = message.from;
@@ -273,8 +349,21 @@ $root.Message = (function() {
             if (options.oneofs)
                 object._text = "text";
         }
-        if (message.response != null && message.hasOwnProperty("response"))
+        if (message.img != null && message.hasOwnProperty("img")) {
+            object.img = $root.ImgMessage.toObject(message.img, options);
+            if (options.oneofs)
+                object._img = "img";
+        }
+        if (message.ext != null && message.hasOwnProperty("ext")) {
+            object.ext = $root.CustomExt.toObject(message.ext, options);
+            if (options.oneofs)
+                object._ext = "ext";
+        }
+        if (message.response != null && message.hasOwnProperty("response")) {
             object.response = $root.Response.toObject(message.response, options);
+            if (options.oneofs)
+                object._response = "response";
+        }
         return object;
     };
 
@@ -329,6 +418,7 @@ $root.Status = (function() {
  * @property {number} CODE_INVALID_FROM=1 CODE_INVALID_FROM value
  * @property {number} CODE_INVALID_TO=2 CODE_INVALID_TO value
  * @property {number} CODE_INVALID_EMPTY_MSG=3 CODE_INVALID_EMPTY_MSG value
+ * @property {number} CODE_NO_PERMISION_IMG=4 CODE_NO_PERMISION_IMG value
  */
 $root.Code = (function() {
     var valuesById = {}, values = Object.create(valuesById);
@@ -336,6 +426,7 @@ $root.Code = (function() {
     values[valuesById[1] = "CODE_INVALID_FROM"] = 1;
     values[valuesById[2] = "CODE_INVALID_TO"] = 2;
     values[valuesById[3] = "CODE_INVALID_EMPTY_MSG"] = 3;
+    values[valuesById[4] = "CODE_NO_PERMISION_IMG"] = 4;
     return values;
 })();
 
@@ -516,6 +607,7 @@ $root.Response = (function() {
             case 1:
             case 2:
             case 3:
+            case 4:
                 break;
             }
         if (message.reason != null && message.hasOwnProperty("reason"))
@@ -574,6 +666,10 @@ $root.Response = (function() {
         case "CODE_INVALID_EMPTY_MSG":
         case 3:
             message.code = 3;
+            break;
+        case "CODE_NO_PERMISION_IMG":
+        case 4:
+            message.code = 4;
             break;
         }
         if (object.reason != null)
@@ -694,7 +790,7 @@ $root.TextMessage = (function() {
         if (!writer)
             writer = $Writer.create();
         if (message.text != null && Object.hasOwnProperty.call(message, "text"))
-            writer.uint32(/* id 3, wireType 2 =*/26).string(message.text);
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.text);
         return writer;
     };
 
@@ -729,7 +825,7 @@ $root.TextMessage = (function() {
         while (reader.pos < end) {
             var tag = reader.uint32();
             switch (tag >>> 3) {
-            case 3: {
+            case 1: {
                     message.text = reader.string();
                     break;
                 }
@@ -838,6 +934,707 @@ $root.TextMessage = (function() {
     };
 
     return TextMessage;
+})();
+
+$root.ImgMessage = (function() {
+
+    /**
+     * Properties of an ImgMessage.
+     * @exports IImgMessage
+     * @interface IImgMessage
+     * @property {string|null} [url] ImgMessage url
+     * @property {number|null} [height] ImgMessage height
+     * @property {number|null} [width] ImgMessage width
+     */
+
+    /**
+     * Constructs a new ImgMessage.
+     * @exports ImgMessage
+     * @classdesc Represents an ImgMessage.
+     * @implements IImgMessage
+     * @constructor
+     * @param {IImgMessage=} [properties] Properties to set
+     */
+    function ImgMessage(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * ImgMessage url.
+     * @member {string} url
+     * @memberof ImgMessage
+     * @instance
+     */
+    ImgMessage.prototype.url = "";
+
+    /**
+     * ImgMessage height.
+     * @member {number} height
+     * @memberof ImgMessage
+     * @instance
+     */
+    ImgMessage.prototype.height = 0;
+
+    /**
+     * ImgMessage width.
+     * @member {number} width
+     * @memberof ImgMessage
+     * @instance
+     */
+    ImgMessage.prototype.width = 0;
+
+    /**
+     * Creates a new ImgMessage instance using the specified properties.
+     * @function create
+     * @memberof ImgMessage
+     * @static
+     * @param {IImgMessage=} [properties] Properties to set
+     * @returns {ImgMessage} ImgMessage instance
+     */
+    ImgMessage.create = function create(properties) {
+        return new ImgMessage(properties);
+    };
+
+    /**
+     * Encodes the specified ImgMessage message. Does not implicitly {@link ImgMessage.verify|verify} messages.
+     * @function encode
+     * @memberof ImgMessage
+     * @static
+     * @param {IImgMessage} message ImgMessage message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ImgMessage.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.url != null && Object.hasOwnProperty.call(message, "url"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.url);
+        if (message.height != null && Object.hasOwnProperty.call(message, "height"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.height);
+        if (message.width != null && Object.hasOwnProperty.call(message, "width"))
+            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.width);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified ImgMessage message, length delimited. Does not implicitly {@link ImgMessage.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof ImgMessage
+     * @static
+     * @param {IImgMessage} message ImgMessage message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ImgMessage.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes an ImgMessage message from the specified reader or buffer.
+     * @function decode
+     * @memberof ImgMessage
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {ImgMessage} ImgMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ImgMessage.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ImgMessage();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1: {
+                    message.url = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.height = reader.int32();
+                    break;
+                }
+            case 3: {
+                    message.width = reader.int32();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes an ImgMessage message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof ImgMessage
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {ImgMessage} ImgMessage
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ImgMessage.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies an ImgMessage message.
+     * @function verify
+     * @memberof ImgMessage
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    ImgMessage.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.url != null && message.hasOwnProperty("url"))
+            if (!$util.isString(message.url))
+                return "url: string expected";
+        if (message.height != null && message.hasOwnProperty("height"))
+            if (!$util.isInteger(message.height))
+                return "height: integer expected";
+        if (message.width != null && message.hasOwnProperty("width"))
+            if (!$util.isInteger(message.width))
+                return "width: integer expected";
+        return null;
+    };
+
+    /**
+     * Creates an ImgMessage message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof ImgMessage
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {ImgMessage} ImgMessage
+     */
+    ImgMessage.fromObject = function fromObject(object) {
+        if (object instanceof $root.ImgMessage)
+            return object;
+        var message = new $root.ImgMessage();
+        if (object.url != null)
+            message.url = String(object.url);
+        if (object.height != null)
+            message.height = object.height | 0;
+        if (object.width != null)
+            message.width = object.width | 0;
+        return message;
+    };
+
+    /**
+     * Creates a plain object from an ImgMessage message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof ImgMessage
+     * @static
+     * @param {ImgMessage} message ImgMessage
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    ImgMessage.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.url = "";
+            object.height = 0;
+            object.width = 0;
+        }
+        if (message.url != null && message.hasOwnProperty("url"))
+            object.url = message.url;
+        if (message.height != null && message.hasOwnProperty("height"))
+            object.height = message.height;
+        if (message.width != null && message.hasOwnProperty("width"))
+            object.width = message.width;
+        return object;
+    };
+
+    /**
+     * Converts this ImgMessage to JSON.
+     * @function toJSON
+     * @memberof ImgMessage
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    ImgMessage.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for ImgMessage
+     * @function getTypeUrl
+     * @memberof ImgMessage
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ImgMessage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ImgMessage";
+    };
+
+    return ImgMessage;
+})();
+
+$root.KV = (function() {
+
+    /**
+     * Properties of a KV.
+     * @exports IKV
+     * @interface IKV
+     * @property {string|null} [key] KV key
+     * @property {string|null} [value] KV value
+     */
+
+    /**
+     * Constructs a new KV.
+     * @exports KV
+     * @classdesc Represents a KV.
+     * @implements IKV
+     * @constructor
+     * @param {IKV=} [properties] Properties to set
+     */
+    function KV(properties) {
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * KV key.
+     * @member {string} key
+     * @memberof KV
+     * @instance
+     */
+    KV.prototype.key = "";
+
+    /**
+     * KV value.
+     * @member {string} value
+     * @memberof KV
+     * @instance
+     */
+    KV.prototype.value = "";
+
+    /**
+     * Creates a new KV instance using the specified properties.
+     * @function create
+     * @memberof KV
+     * @static
+     * @param {IKV=} [properties] Properties to set
+     * @returns {KV} KV instance
+     */
+    KV.create = function create(properties) {
+        return new KV(properties);
+    };
+
+    /**
+     * Encodes the specified KV message. Does not implicitly {@link KV.verify|verify} messages.
+     * @function encode
+     * @memberof KV
+     * @static
+     * @param {IKV} message KV message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    KV.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.key != null && Object.hasOwnProperty.call(message, "key"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.key);
+        if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.value);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified KV message, length delimited. Does not implicitly {@link KV.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof KV
+     * @static
+     * @param {IKV} message KV message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    KV.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a KV message from the specified reader or buffer.
+     * @function decode
+     * @memberof KV
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {KV} KV
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    KV.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.KV();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1: {
+                    message.key = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.value = reader.string();
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a KV message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof KV
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {KV} KV
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    KV.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a KV message.
+     * @function verify
+     * @memberof KV
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    KV.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.key != null && message.hasOwnProperty("key"))
+            if (!$util.isString(message.key))
+                return "key: string expected";
+        if (message.value != null && message.hasOwnProperty("value"))
+            if (!$util.isString(message.value))
+                return "value: string expected";
+        return null;
+    };
+
+    /**
+     * Creates a KV message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof KV
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {KV} KV
+     */
+    KV.fromObject = function fromObject(object) {
+        if (object instanceof $root.KV)
+            return object;
+        var message = new $root.KV();
+        if (object.key != null)
+            message.key = String(object.key);
+        if (object.value != null)
+            message.value = String(object.value);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a KV message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof KV
+     * @static
+     * @param {KV} message KV
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    KV.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.defaults) {
+            object.key = "";
+            object.value = "";
+        }
+        if (message.key != null && message.hasOwnProperty("key"))
+            object.key = message.key;
+        if (message.value != null && message.hasOwnProperty("value"))
+            object.value = message.value;
+        return object;
+    };
+
+    /**
+     * Converts this KV to JSON.
+     * @function toJSON
+     * @memberof KV
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    KV.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for KV
+     * @function getTypeUrl
+     * @memberof KV
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    KV.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/KV";
+    };
+
+    return KV;
+})();
+
+$root.CustomExt = (function() {
+
+    /**
+     * Properties of a CustomExt.
+     * @exports ICustomExt
+     * @interface ICustomExt
+     * @property {Array.<IKV>|null} [kvs] CustomExt kvs
+     */
+
+    /**
+     * Constructs a new CustomExt.
+     * @exports CustomExt
+     * @classdesc Represents a CustomExt.
+     * @implements ICustomExt
+     * @constructor
+     * @param {ICustomExt=} [properties] Properties to set
+     */
+    function CustomExt(properties) {
+        this.kvs = [];
+        if (properties)
+            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * CustomExt kvs.
+     * @member {Array.<IKV>} kvs
+     * @memberof CustomExt
+     * @instance
+     */
+    CustomExt.prototype.kvs = $util.emptyArray;
+
+    /**
+     * Creates a new CustomExt instance using the specified properties.
+     * @function create
+     * @memberof CustomExt
+     * @static
+     * @param {ICustomExt=} [properties] Properties to set
+     * @returns {CustomExt} CustomExt instance
+     */
+    CustomExt.create = function create(properties) {
+        return new CustomExt(properties);
+    };
+
+    /**
+     * Encodes the specified CustomExt message. Does not implicitly {@link CustomExt.verify|verify} messages.
+     * @function encode
+     * @memberof CustomExt
+     * @static
+     * @param {ICustomExt} message CustomExt message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    CustomExt.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.kvs != null && message.kvs.length)
+            for (var i = 0; i < message.kvs.length; ++i)
+                $root.KV.encode(message.kvs[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified CustomExt message, length delimited. Does not implicitly {@link CustomExt.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof CustomExt
+     * @static
+     * @param {ICustomExt} message CustomExt message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    CustomExt.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a CustomExt message from the specified reader or buffer.
+     * @function decode
+     * @memberof CustomExt
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {CustomExt} CustomExt
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    CustomExt.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.CustomExt();
+        while (reader.pos < end) {
+            var tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1: {
+                    if (!(message.kvs && message.kvs.length))
+                        message.kvs = [];
+                    message.kvs.push($root.KV.decode(reader, reader.uint32()));
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a CustomExt message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof CustomExt
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {CustomExt} CustomExt
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    CustomExt.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a CustomExt message.
+     * @function verify
+     * @memberof CustomExt
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    CustomExt.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.kvs != null && message.hasOwnProperty("kvs")) {
+            if (!Array.isArray(message.kvs))
+                return "kvs: array expected";
+            for (var i = 0; i < message.kvs.length; ++i) {
+                var error = $root.KV.verify(message.kvs[i]);
+                if (error)
+                    return "kvs." + error;
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Creates a CustomExt message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof CustomExt
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {CustomExt} CustomExt
+     */
+    CustomExt.fromObject = function fromObject(object) {
+        if (object instanceof $root.CustomExt)
+            return object;
+        var message = new $root.CustomExt();
+        if (object.kvs) {
+            if (!Array.isArray(object.kvs))
+                throw TypeError(".CustomExt.kvs: array expected");
+            message.kvs = [];
+            for (var i = 0; i < object.kvs.length; ++i) {
+                if (typeof object.kvs[i] !== "object")
+                    throw TypeError(".CustomExt.kvs: object expected");
+                message.kvs[i] = $root.KV.fromObject(object.kvs[i]);
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a CustomExt message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof CustomExt
+     * @static
+     * @param {CustomExt} message CustomExt
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    CustomExt.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        var object = {};
+        if (options.arrays || options.defaults)
+            object.kvs = [];
+        if (message.kvs && message.kvs.length) {
+            object.kvs = [];
+            for (var j = 0; j < message.kvs.length; ++j)
+                object.kvs[j] = $root.KV.toObject(message.kvs[j], options);
+        }
+        return object;
+    };
+
+    /**
+     * Converts this CustomExt to JSON.
+     * @function toJSON
+     * @memberof CustomExt
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    CustomExt.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for CustomExt
+     * @function getTypeUrl
+     * @memberof CustomExt
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    CustomExt.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/CustomExt";
+    };
+
+    return CustomExt;
 })();
 
 module.exports = $root;
