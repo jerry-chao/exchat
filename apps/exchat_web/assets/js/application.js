@@ -39,9 +39,8 @@ class myWebsocketHandler {
       this.SendAck = root.lookupType("SendAck");
 
       const metaProto = await protobuf.load("meta.proto");
-      this.Sync = root.lookupType("Sync");
-      this.SyncAck = root.lookupType("SyncAck");
-      this.Meta = root.lookupType("Meta");
+      this.Sync = metaProto.lookupType("Sync");
+      this.Meta = metaProto.lookupType("Meta");
 
       const messageProto = await protobuf.load("message.proto");
       this.Message = messageProto.lookupType("Message");
@@ -264,12 +263,26 @@ class myWebsocketHandler {
       text: textMessage,
     });
     const messageBuffer = this.Message.encode(message).finish();
-
-    const msg = this.Sync.create({
+    const seq = new Date().getTime();
+    const meta = this.Meta.create({
+      type: "TYPE_MESSAGE",
       payload: messageBuffer,
+      is_store: true,
+      is_sync_from: false,
+    })
+
+    const sync = this.Sync.create({
+      seq: seq,
+      type: "SYNC",
+      queue: target.value,
+      metas: [meta]
+    });
+    const send = this.Send.create({
+      seq_id: seq,
+      payload: this.Sync.encode(sync).finish(),
     });
     const chat = this.Chat.create({
-      sync: msg,
+      send: send,
     });
     const buffer = this.Chat.encode(chat).finish();
     this.socket.send(buffer);

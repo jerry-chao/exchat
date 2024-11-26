@@ -9,7 +9,7 @@ defmodule Connection.Client do
     %{result: :ok, response: nil, state: state}
     |> handle_connect(chat.connect)
     |> handle_disconnect(chat.disconnect)
-    |> handle_sync(chat.sync)
+    |> handle_sync(chat.send)
     |> handle_ping(chat.ping)
   end
 
