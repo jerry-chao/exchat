@@ -14,7 +14,10 @@ defmodule Connection.Meta do
     Enum.map(metas, fn meta ->
       handle_meta(%{result: :ok}, uid, meta)
     end)
-    "handle meta success"
+
+    Protos.Sync.encode(%Protos.Sync{
+      response: %Protos.SyncResponse{status: :OK, code: :CODE_OK, reason: "ok"}
+    })
   end
 
   def handle_meta(%{result: :ok}, uid, %Protos.Meta{

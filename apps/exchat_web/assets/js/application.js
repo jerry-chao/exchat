@@ -95,6 +95,7 @@ class myWebsocketHandler {
       const arrayBuffer = await event.data.arrayBuffer();
       const uint8Array = new Uint8Array(arrayBuffer);
       const decodedMessage = this.Chat.decode(uint8Array);
+      console.log('recv decodedMessage ', decodedMessage);
       var show = JSON.stringify(decodedMessage);
       if (decodedMessage.pong) {
         this.handlePong();
@@ -104,14 +105,14 @@ class myWebsocketHandler {
         this.handleConnack();
       }
 
-      if (decodedMessage.syncAck) {
-        const syncResult = await this.handleSyncAck(decodedMessage.syncAck);
+      if (decodedMessage.sendAck) {
+        const syncResult = await this.handleSendAck(decodedMessage.sendAck);
         const input = document.getElementById("message");
         show = JSON.stringify({"text": input.value, result: syncResult});
         input.value = '';
       }
 
-      if (decodedMessage.sync) {
+      if (decodedMessage.send) {
         const syncPayload = this.handleSync(decodedMessage.sync);
         show = JSON.stringify(syncPayload);
       }
@@ -140,12 +141,13 @@ class myWebsocketHandler {
     window.dispatchEvent(event);
   }
 
-  async handleSyncAck(ack) {
-    console.log(`received sync ack message`, ack);
-    const decodedMessage = this.Message.decode(ack.detail);
-    console.log(`received sync ack detail`, decodedMessage);
-    console.log(`received response code: ${decodedMessage.response.code}, status: ${decodedMessage.response.status}`);
-    return decodedMessage;
+  async handleSendAck(ack) {
+    console.log(`received send ack message`, ack);
+    const decodedSync = this.Sync.decode(ack.detail);
+    console.log('received sync ack', decodedSync);
+    console.log(`received send ack detail`, decodedSync);
+    console.log(`received response code: ${decodedSync.response.code}, status: ${decodedSync.response.status}`);
+    return decodedSync;
   }
 
   handleConnack() {
