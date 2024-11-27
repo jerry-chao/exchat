@@ -99,6 +99,7 @@ class myWebsocketHandler {
       var show = JSON.stringify(decodedMessage);
       if (decodedMessage.pong) {
         this.handlePong();
+        return;
       }
 
       if (decodedMessage.connAck) {
