@@ -59,6 +59,7 @@ defmodule Connection.SocketHandler do
 
     seq_id = :os.system_time(:millisecond) * 1000 + (:rand.uniform(1000) - 1)
     sync = %Protos.Sync{seq: seq_id, type: :SYNC, is_last: true, metas: [meta]}
-    {:reply, {:binary, Protos.Chat.encode(%Protos.Chat{send: sync})}, state}
+    send = %Protos.Send{payload: Protos.Sync.encode(sync)}
+    {:reply, {:binary, Protos.Chat.encode(%Protos.Chat{send: send})}, state}
   end
 end

@@ -43,6 +43,6 @@ message Meta {
    int64 id = 1;
    MetaType type = 2;
    bytes payload = 3;
-   bytes is_store = 4;
-   bytes is_sync_from = 5;
+   bool is_store = 4;
+   bool is_sync_from = 5;
 }

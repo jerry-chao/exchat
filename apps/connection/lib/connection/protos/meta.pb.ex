@@ -55,7 +55,7 @@ defmodule Protos.Meta do
           extendee: nil,
           number: 4,
           label: :LABEL_OPTIONAL,
-          type: :TYPE_BYTES,
+          type: :TYPE_BOOL,
           type_name: nil,
           default_value: nil,
           options: nil,
@@ -69,7 +69,7 @@ defmodule Protos.Meta do
           extendee: nil,
           number: 5,
           label: :LABEL_OPTIONAL,
-          type: :TYPE_BYTES,
+          type: :TYPE_BOOL,
           type_name: nil,
           default_value: nil,
           options: nil,
@@ -94,8 +94,8 @@ defmodule Protos.Meta do
   field :id, 1, type: :int64
   field :type, 2, type: Protos.MetaType, enum: true
   field :payload, 3, type: :bytes
-  field :is_store, 4, type: :bytes, json_name: "isStore"
-  field :is_sync_from, 5, type: :bytes, json_name: "isSyncFrom"
+  field :is_store, 4, type: :bool, json_name: "isStore"
+  field :is_sync_from, 5, type: :bool, json_name: "isSyncFrom"
 
   def transform_module(), do: Connection.Transform
 end

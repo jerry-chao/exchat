@@ -847,8 +847,8 @@ $root.Meta = (function() {
      * @property {number|Long|null} [id] Meta id
      * @property {MetaType|null} [type] Meta type
      * @property {Uint8Array|null} [payload] Meta payload
-     * @property {Uint8Array|null} [isStore] Meta isStore
-     * @property {Uint8Array|null} [isSyncFrom] Meta isSyncFrom
+     * @property {boolean|null} [isStore] Meta isStore
+     * @property {boolean|null} [isSyncFrom] Meta isSyncFrom
      */
 
     /**
@@ -892,19 +892,19 @@ $root.Meta = (function() {
 
     /**
      * Meta isStore.
-     * @member {Uint8Array} isStore
+     * @member {boolean} isStore
      * @memberof Meta
      * @instance
      */
-    Meta.prototype.isStore = $util.newBuffer([]);
+    Meta.prototype.isStore = false;
 
     /**
      * Meta isSyncFrom.
-     * @member {Uint8Array} isSyncFrom
+     * @member {boolean} isSyncFrom
      * @memberof Meta
      * @instance
      */
-    Meta.prototype.isSyncFrom = $util.newBuffer([]);
+    Meta.prototype.isSyncFrom = false;
 
     /**
      * Creates a new Meta instance using the specified properties.
@@ -937,9 +937,9 @@ $root.Meta = (function() {
         if (message.payload != null && Object.hasOwnProperty.call(message, "payload"))
             writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.payload);
         if (message.isStore != null && Object.hasOwnProperty.call(message, "isStore"))
-            writer.uint32(/* id 4, wireType 2 =*/34).bytes(message.isStore);
+            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isStore);
         if (message.isSyncFrom != null && Object.hasOwnProperty.call(message, "isSyncFrom"))
-            writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.isSyncFrom);
+            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isSyncFrom);
         return writer;
     };
 
@@ -987,11 +987,11 @@ $root.Meta = (function() {
                     break;
                 }
             case 4: {
-                    message.isStore = reader.bytes();
+                    message.isStore = reader.bool();
                     break;
                 }
             case 5: {
-                    message.isSyncFrom = reader.bytes();
+                    message.isSyncFrom = reader.bool();
                     break;
                 }
             default:
@@ -1044,11 +1044,11 @@ $root.Meta = (function() {
             if (!(message.payload && typeof message.payload.length === "number" || $util.isString(message.payload)))
                 return "payload: buffer expected";
         if (message.isStore != null && message.hasOwnProperty("isStore"))
-            if (!(message.isStore && typeof message.isStore.length === "number" || $util.isString(message.isStore)))
-                return "isStore: buffer expected";
+            if (typeof message.isStore !== "boolean")
+                return "isStore: boolean expected";
         if (message.isSyncFrom != null && message.hasOwnProperty("isSyncFrom"))
-            if (!(message.isSyncFrom && typeof message.isSyncFrom.length === "number" || $util.isString(message.isSyncFrom)))
-                return "isSyncFrom: buffer expected";
+            if (typeof message.isSyncFrom !== "boolean")
+                return "isSyncFrom: boolean expected";
         return null;
     };
 
@@ -1095,15 +1095,9 @@ $root.Meta = (function() {
             else if (object.payload.length >= 0)
                 message.payload = object.payload;
         if (object.isStore != null)
-            if (typeof object.isStore === "string")
-                $util.base64.decode(object.isStore, message.isStore = $util.newBuffer($util.base64.length(object.isStore)), 0);
-            else if (object.isStore.length >= 0)
-                message.isStore = object.isStore;
+            message.isStore = Boolean(object.isStore);
         if (object.isSyncFrom != null)
-            if (typeof object.isSyncFrom === "string")
-                $util.base64.decode(object.isSyncFrom, message.isSyncFrom = $util.newBuffer($util.base64.length(object.isSyncFrom)), 0);
-            else if (object.isSyncFrom.length >= 0)
-                message.isSyncFrom = object.isSyncFrom;
+            message.isSyncFrom = Boolean(object.isSyncFrom);
         return message;
     };
 
@@ -1134,20 +1128,8 @@ $root.Meta = (function() {
                 if (options.bytes !== Array)
                     object.payload = $util.newBuffer(object.payload);
             }
-            if (options.bytes === String)
-                object.isStore = "";
-            else {
-                object.isStore = [];
-                if (options.bytes !== Array)
-                    object.isStore = $util.newBuffer(object.isStore);
-            }
-            if (options.bytes === String)
-                object.isSyncFrom = "";
-            else {
-                object.isSyncFrom = [];
-                if (options.bytes !== Array)
-                    object.isSyncFrom = $util.newBuffer(object.isSyncFrom);
-            }
+            object.isStore = false;
+            object.isSyncFrom = false;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             if (typeof message.id === "number")
@@ -1159,9 +1141,9 @@ $root.Meta = (function() {
         if (message.payload != null && message.hasOwnProperty("payload"))
             object.payload = options.bytes === String ? $util.base64.encode(message.payload, 0, message.payload.length) : options.bytes === Array ? Array.prototype.slice.call(message.payload) : message.payload;
         if (message.isStore != null && message.hasOwnProperty("isStore"))
-            object.isStore = options.bytes === String ? $util.base64.encode(message.isStore, 0, message.isStore.length) : options.bytes === Array ? Array.prototype.slice.call(message.isStore) : message.isStore;
+            object.isStore = message.isStore;
         if (message.isSyncFrom != null && message.hasOwnProperty("isSyncFrom"))
-            object.isSyncFrom = options.bytes === String ? $util.base64.encode(message.isSyncFrom, 0, message.isSyncFrom.length) : options.bytes === Array ? Array.prototype.slice.call(message.isSyncFrom) : message.isSyncFrom;
+            object.isSyncFrom = message.isSyncFrom;
         return object;
     };
 
