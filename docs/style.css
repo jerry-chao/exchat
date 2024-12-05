@@ -1,0 +1,25 @@
+h1 {
+  color: #3498db;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+}
+
+/* 自定义段落样式 */
+p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 自定义幻灯片背景颜色 */
+.slidev-layout {
+  background-color: #f5f5f5;
+}
+
+/* 自定义代码块样式 */
+pre {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 10px;
+  border-radius: 5px;
+}
