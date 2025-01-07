@@ -17,7 +17,7 @@ defmodule ExchatWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  use Gettext, backend: MyApp.Gettext
+  use Gettext, backend: ExchatWeb.Gettext
 
   @doc """
   Renders a modal.
