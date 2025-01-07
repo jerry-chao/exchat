@@ -1,12 +1,6 @@
 # This file is responsible for configuring your umbrella
 # and **all applications** and their dependencies with the
 # help of the Config module.
-#
-# Note that all applications in your umbrella share the
-# same configuration and dependencies, which is why they
-# all use the same configuration file. If you want different
-# configurations or dependencies per app, it is best to
-# move said applications out of the umbrella.
 import Config
 
 # Configure Mix tasks and generators
@@ -62,6 +56,21 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
+# Mailer configuration
+config :exchat, Exchat.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: "smtp.qq.com",
+  username: "462283159@qq.com",
+  password: "imwuhuaxrnyacabb",
+  ssl: true,
+  tls: :always,
+  auth: :always,
+  port: 465,
+  ssl_options: [
+    verify: :verify_peer,
+    server_name_indication: ~c"smtp.qq.com",
+    reuse_sessions: false
+  ]
+
+# Import environment specific config
 import_config "#{config_env()}.exs"

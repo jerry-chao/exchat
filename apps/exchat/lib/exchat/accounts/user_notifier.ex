@@ -4,11 +4,11 @@ defmodule Exchat.Accounts.UserNotifier do
   alias Exchat.Mailer
 
   # Delivers the email using the application mailer.
-  defp deliver(recipient, subject, body) do
+  def deliver(recipient, subject, body) do
     email =
       new()
       |> to(recipient)
-      |> from({"Exchat", "contact@example.com"})
+      |> from({"Exchat", "462283159@qq.com"})
       |> subject(subject)
       |> text_body(body)
 

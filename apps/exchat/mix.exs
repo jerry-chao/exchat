@@ -43,7 +43,10 @@ defmodule Exchat.MixProject do
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.2"},
-      {:logger_file_backend, "~> 0.0.14"}
+      {:logger_file_backend, "~> 0.0.14"},
+      {:swoosh, "~> 1.17"},
+      {:gen_smtp, "~> 1.0"},
+      {:hackney, "~> 1.20"}
     ]
   end
 
