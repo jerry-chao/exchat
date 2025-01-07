@@ -36,6 +36,7 @@ defmodule Exchat.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:dns_cluster, "~> 0.1.1"},
       {:libcluster, "~> 3.4"},
       {:phoenix_pubsub, "~> 2.1"},
