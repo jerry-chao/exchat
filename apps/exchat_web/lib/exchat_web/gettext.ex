@@ -20,5 +20,5 @@ defmodule ExchatWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :exchat_web
+  use Gettext.Backend, otp_app: :exchat_web
 end
