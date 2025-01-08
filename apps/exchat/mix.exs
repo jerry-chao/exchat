@@ -46,7 +46,8 @@ defmodule Exchat.MixProject do
       {:logger_file_backend, "~> 0.0.14"},
       {:swoosh, "~> 1.17"},
       {:gen_smtp, "~> 1.0"},
-      {:hackney, "~> 1.20"}
+      {:hackney, "~> 1.20"},
+      {:message, in_umbrella: true}
     ]
   end
 

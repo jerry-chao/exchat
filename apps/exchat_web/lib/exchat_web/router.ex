@@ -16,12 +16,6 @@ defmodule ExchatWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  scope "/", ExchatWeb do
-    pipe_through([:browser, :redirect_if_user_is_authenticated])
-
-    get("/", ChatController, :index)
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", ExchatWeb do
   #   pipe_through :api
@@ -48,6 +42,7 @@ defmodule ExchatWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{ExchatWeb.UserAuth, :ensure_authenticated}] do
+      live("/", MainLive.Index, :index)
       live("/users/settings", UserSettingsLive, :edit)
       live("/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email)
     end

@@ -33,8 +33,8 @@ defmodule Message do
 
   def send_message(response, message) do
     Logger.info("send message to user : #{inspect(message.to)}, #{inspect(message)}")
-    sync = Protos.Message.encode(message)
-    Exchat.Session.send_message(message.to, sync)
+    # sync = Protos.Message.encode(message)
+    # Exchat.Session.send_message(message.to, sync)
     response
   end
 
@@ -79,5 +79,41 @@ defmodule Message do
   def handle_text(response, uid, %Protos.TextMessage{text: txt}) do
     Logger.info("handle uid #{uid} send text message: #{inspect(txt)}")
     response
+  end
+
+  @doc """
+  Gets messages for a conversation by cid.
+  Returns messages where from or to matches the cid.
+
+  ## Examples
+
+      iex> get_messages("user123")
+      [%Message.Messages{}, ...]
+  """
+  def get_messages(cid) when is_binary(cid) do
+    import Ecto.Query
+
+    Message.Messages
+    |> where([m], m.from == ^cid or m.to == ^cid)
+    |> order_by([m], asc: m.inserted_at)
+    |> Message.Repo.all()
+    |> Enum.map(fn message ->
+      %{
+        content: message.txt,
+        timestamp: message.inserted_at,
+        is_self: message.from == cid
+      }
+    end)
+  end
+
+  def get_messages(_), do: []
+
+  @doc """
+  Creates a message.
+  """
+  def create_message(attrs \\ %{}) do
+    %Message.Messages{}
+    |> Message.Messages.changeset(attrs)
+    |> Message.Repo.insert()
   end
 end

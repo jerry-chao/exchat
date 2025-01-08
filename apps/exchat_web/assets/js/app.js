@@ -17,11 +17,11 @@
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
-import "./protobuf.min.js"
-import "./application.js"
-import "./connection.js"
-import "./meta.js"
-import "./message.js"
+// import "./protobuf.min.js"
+// import "./application.js"
+// import "./connection.js"
+// import "./meta.js"
+// import "./message.js"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
