@@ -63,13 +63,11 @@ config :exchat, Exchat.Mailer,
   username: "462283159@qq.com",
   password: "imwuhuaxrnyacabb",
   ssl: true,
-  tls: :always,
+  tls: :never,
   auth: :always,
   port: 465,
-  ssl_options: [
-    verify: :verify_peer,
-    server_name_indication: ~c"smtp.qq.com",
-    reuse_sessions: false
+  sockopts: [
+    verify: :verify_none
   ]
 
 # Import environment specific config
