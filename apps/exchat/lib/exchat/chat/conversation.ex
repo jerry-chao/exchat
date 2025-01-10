@@ -8,6 +8,7 @@ defmodule Exchat.Chat.Conversation do
     field(:cid, :integer)
     field(:user_id, :id)
     field(:last_message, :map, virtual: true)
+    field(:unread_count, :integer, virtual: true)
     timestamps()
   end
 
