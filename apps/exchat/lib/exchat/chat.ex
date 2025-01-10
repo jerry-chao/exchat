@@ -1,7 +1,7 @@
 defmodule Exchat.Chat do
   import Ecto.Query
-  alias Exchat.Repo
-  alias Exchat.Chat.Conversation
+  alias Exchat.{Repo, Chat.Conversation}
+  alias Message.Messages
 
   @doc """
   Creates a single-user conversation.
@@ -142,5 +142,37 @@ defmodule Exchat.Chat do
   """
   def change_conversation(%Conversation{} = conversation, attrs \\ %{}) do
     Conversation.changeset(conversation, attrs)
+  end
+
+  def assign_last_message(conversations) when is_list(conversations) do
+    conversation_ids = Enum.map(conversations, & &1.id)
+
+    last_messages_query =
+      from(m in Messages,
+        where: m.from in ^conversation_ids or m.to in ^conversation_ids,
+        group_by: m.conversation_id,
+        select: %{
+          conversation_id: m.conversation_id,
+          inserted_at: max(m.inserted_at)
+        }
+      )
+
+    last_messages = Repo.all(last_messages_query)
+
+    Enum.map(conversations, fn conversation ->
+      last_message = Enum.find(last_messages, &(&1.conversation_id == conversation.id))
+      %{conversation | last_message: last_message}
+    end)
+  end
+
+  def get_last_message(uid, cid) do
+    from(m in Messages,
+      where:
+        (m.from == ^cid and m.to == ^uid) or
+          (m.to == ^cid and m.from == ^uid),
+      order_by: [desc: m.inserted_at],
+      limit: 1
+    )
+    |> Repo.one()
   end
 end

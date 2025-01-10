@@ -4,7 +4,7 @@ defmodule Exchat.Repo.Migrations.CreateConversations do
   def change do
     create table(:conversations) do
       add(:type, :string)
-      add(:cid, :string)
+      add(:cid, :integer)
       add(:name, :string)
       add(:user_id, references(:users, on_delete: :nothing))
 

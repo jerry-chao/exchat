@@ -2,7 +2,7 @@ defmodule Message.Repo.Migrations.AddMessagesTable do
   use Ecto.Migration
 
   def change do
-    create table(:message) do
+    create table(:messages) do
       add(:from, references(:users, on_delete: :delete_all), null: false)
       add(:to, references(:users, on_delete: :delete_all), null: false)
       add(:txt, :string)
@@ -10,7 +10,7 @@ defmodule Message.Repo.Migrations.AddMessagesTable do
       timestamps()
     end
 
-    create(index(:message, [:from]))
-    create(index(:message, [:to]))
+    create(index(:messages, [:from]))
+    create(index(:messages, [:to]))
   end
 end

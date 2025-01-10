@@ -8,11 +8,12 @@ defmodule ExchatWeb.MainLive.Index do
     case session do
       %{"user_token" => user_token} ->
         current_user = Exchat.Accounts.get_user_by_session_token(user_token)
+        conversations = Chat.list_conversations(current_user.id)
 
         {:ok,
          socket
          |> assign(:current_user, current_user)
-         |> stream(:mains, Chat.list_conversations(current_user.id))
+         |> stream(:mains, conversations)
          |> assign(:selected_conversation, nil)
          |> assign(:messages, [])}
 

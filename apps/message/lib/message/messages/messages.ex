@@ -2,7 +2,7 @@ defmodule Message.Messages do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "message" do
+  schema "messages" do
     field(:from, :integer)
     field(:to, :integer)
     field(:txt, :string)
