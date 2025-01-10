@@ -27,14 +27,6 @@ defmodule Exchat.Chat do
   def list_conversations(user_id) do
     Conversation
     |> where([c], c.user_id == ^user_id)
-    |> join(:left, [c], m in assoc(c, :messages),
-      on:
-        m.id in fragment(
-          "SELECT id FROM messages WHERE conversation_id = ? ORDER BY inserted_at DESC LIMIT 1",
-          c.id
-        )
-    )
-    |> preload([c, m], messages: m)
     |> Repo.all()
   end
 

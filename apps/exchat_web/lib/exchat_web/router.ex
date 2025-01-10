@@ -10,6 +10,7 @@ defmodule ExchatWeb.Router do
     plug(:put_root_layout, html: {ExchatWeb.Layouts, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(:fetch_current_user)
   end
 
   pipeline :api do
@@ -22,6 +23,14 @@ defmodule ExchatWeb.Router do
   # end
 
   ## Authentication routes
+
+  scope "/", ExchatWeb do
+    pipe_through([:browser, :require_authenticated_user])
+
+    live_session :default, on_mount: [{ExchatWeb.UserAuth, :ensure_authenticated}] do
+      live("/", MainLive.Index, :index)
+    end
+  end
 
   scope "/", ExchatWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
@@ -42,7 +51,6 @@ defmodule ExchatWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{ExchatWeb.UserAuth, :ensure_authenticated}] do
-      live("/", MainLive.Index, :index)
       live("/users/settings", UserSettingsLive, :edit)
       live("/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email)
     end
