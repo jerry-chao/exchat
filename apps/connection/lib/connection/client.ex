@@ -140,7 +140,7 @@ defmodule Connection.Client do
   end
 
   def auth(uid, password) do
-    case Exchat.Account.get_user_by_uid!(uid) do
+    case Exchat.Accounts.get_user!(uid) do
       nil -> false
       user -> user.password == password
     end

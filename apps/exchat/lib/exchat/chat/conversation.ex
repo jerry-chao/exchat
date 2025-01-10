@@ -8,8 +8,6 @@ defmodule Exchat.Chat.Conversation do
     field(:cid, :integer)
     field(:user_id, :id)
     field(:last_message, :map, virtual: true)
-
-    has_many(:messages, Exchat.Chat.Message, foreign_key: :conversation_id)
     timestamps()
   end
 

@@ -3,8 +3,8 @@ defmodule Message.Repo.Migrations.AddMessagesTable do
 
   def change do
     create table(:messages) do
-      add(:from, references(:users, on_delete: :delete_all), null: false)
-      add(:to, references(:users, on_delete: :delete_all), null: false)
+      add(:from, :integer)
+      add(:to, :integer)
       add(:txt, :string)
 
       timestamps()
