@@ -15,7 +15,9 @@ defmodule ExchatWeb.MainLive.Index do
          |> assign(:current_user, current_user)
          |> stream(:mains, conversations)
          |> assign(:selected_conversation, nil)
-         |> assign(:messages, [])}
+         |> assign(:messages, [])
+         |> assign(:uploaded_files, [])
+         |> assign(:show_emoji_picker, nil)}
 
       _ ->
         {:ok,
@@ -39,16 +41,20 @@ defmodule ExchatWeb.MainLive.Index do
   @impl true
   def handle_event("send_message", %{"message" => content}, socket) do
     if socket.assigns.selected_conversation do
-      message =
+      result =
         Message.create_message(%{
           from: socket.assigns.current_user.id,
           to: socket.assigns.selected_conversation.cid,
           txt: content
         })
 
-      {:noreply,
-       socket
-       |> update(:messages, fn messages -> messages ++ [message] end)}
+      case result do
+        {:ok, message} ->
+          {:noreply, socket |> update(:messages, fn messages -> messages ++ [message] end)}
+
+        {:error, _} ->
+          {:noreply, socket |> put_flash(:error, "Failed to send message")}
+      end
     else
       {:noreply, socket}
     end
