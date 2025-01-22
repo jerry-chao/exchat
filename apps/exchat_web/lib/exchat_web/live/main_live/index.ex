@@ -64,7 +64,8 @@ defmodule ExchatWeb.MainLive.Index do
   @impl true
   def handle_event("select_conversation", %{"id" => id}, socket) do
     conversation = Chat.get_conversation!(id)
-    messages = Message.get_messages(conversation.cid)
+    messages = Message.get_messages(socket.assigns.current_user.id, conversation.cid)
+    Logger.info("conversation: #{id}, message: #{inspect(messages)}")
 
     {:noreply,
      socket

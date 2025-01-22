@@ -7,6 +7,7 @@ defmodule Message.Messages do
     field(:to, :integer)
     field(:txt, :string)
     field(:read_at, :naive_datetime)
+    field(:is_self, :boolean, virtual: true)
 
     timestamps()
   end

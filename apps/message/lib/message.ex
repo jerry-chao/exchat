@@ -87,26 +87,25 @@ defmodule Message do
 
   ## Examples
 
-      iex> get_messages("user123")
+      iex> get_messages(5,6)
       [%Message.Messages{}, ...]
   """
-  def get_messages(cid) when is_binary(cid) do
+  def get_messages(user_id, cid) when is_integer(cid) and is_integer(user_id) do
     import Ecto.Query
 
     Message.Messages
-    |> where([m], m.from == ^cid or m.to == ^cid)
+    |> where([m], (m.from == ^cid and m.to == ^user_id) or (m.from == ^user_id and m.to == ^cid))
     |> order_by([m], asc: m.inserted_at)
     |> Message.Repo.all()
     |> Enum.map(fn message ->
       %{
-        content: message.txt,
-        timestamp: message.inserted_at,
-        is_self: message.from == cid
+        message
+        | is_self: message.from == user_id
       }
     end)
   end
 
-  def get_messages(_), do: []
+  def get_messages(_, _), do: []
 
   @doc """
   Creates a message.
