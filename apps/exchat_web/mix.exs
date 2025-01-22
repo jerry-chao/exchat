@@ -23,7 +23,7 @@ defmodule ExchatWeb.MixProject do
   def application do
     [
       mod: {ExchatWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools, :logger_file_backend]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -56,8 +56,7 @@ defmodule ExchatWeb.MixProject do
       {:gettext, "~> 0.20"},
       {:exchat, in_umbrella: true},
       {:jason, "~> 1.2"},
-      {:bandit, "~> 1.2"},
-      {:logger_file_backend, "~> 0.0.14"}
+      {:bandit, "~> 1.2"}
     ]
   end
 

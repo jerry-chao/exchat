@@ -48,13 +48,22 @@ config :tailwind,
     cd: Path.expand("../apps/exchat_web/assets", __DIR__)
   ]
 
-# Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
-
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :logger, :default_handler,
+  config: [
+    file: ~c"info.log",
+    filesync_repeat_interval: 5000,
+    file_check: 5000,
+    max_no_bytes: 10_000_000,
+    max_no_files: 5,
+    compress_on_rotate: true
+  ]
+
+config :logger, :default_formatter,
+  format: "\n$time $metadata[$level] $message\n",
+  metadata: [:user_id, :pid, :file]
 
 # Mailer configuration
 config :exchat, Exchat.Mailer,

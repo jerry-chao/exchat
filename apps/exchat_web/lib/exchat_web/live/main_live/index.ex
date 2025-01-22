@@ -11,7 +11,9 @@ defmodule ExchatWeb.MainLive.Index do
       %{"user_token" => user_token} ->
         current_user = Exchat.Accounts.get_user_by_session_token(user_token)
         conversations = Chat.list_conversations(current_user.id)
+        Logger.metadata(user_id: current_user.id)
         Logger.info("conversations: #{inspect(conversations)}")
+        Exchat.Session.register(current_user.id, [])
 
         {:ok,
          socket
@@ -85,6 +87,8 @@ defmodule ExchatWeb.MainLive.Index do
 
       case result do
         {:ok, message} ->
+          # route message to other session
+          Exchat.Session.send_message(socket.assigns.selected_conversation.cid, message)
           {:noreply, socket |> update(:messages, fn messages -> messages ++ [message] end)}
 
         {:error, _} ->
@@ -93,5 +97,11 @@ defmodule ExchatWeb.MainLive.Index do
     else
       {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_info({:message, message}, socket) do
+    Logger.info("receive message #{inspect(message)}")
+    {:noreply, socket |> update(:messages, fn messages -> messages ++ [message] end)}
   end
 end
