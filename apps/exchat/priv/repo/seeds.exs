@@ -56,14 +56,14 @@ alias Exchat.{Accounts, Chat, Repo}
 # Create test conversations
 Repo.insert!(%Chat.Conversation{
   name: "General Chat",
-  type: "private",
+  type: "single",
   cid: user2.id,
   user_id: user1.id
 })
 
 Repo.insert!(%Chat.Conversation{
   name: "Tech Discussion",
-  type: "private",
+  type: "single",
   cid: user3.id,
   user_id: user1.id
 })
@@ -71,14 +71,14 @@ Repo.insert!(%Chat.Conversation{
 # Create some private conversations
 Repo.insert!(%Chat.Conversation{
   name: "John-Jane Chat",
-  type: "private",
+  type: "single",
   cid: user4.id,
   user_id: user1.id
 })
 
 Repo.insert!(%Chat.Conversation{
   name: "Project Alpha",
-  type: "private",
+  type: "single",
   cid: user5.id,
   user_id: user1.id
 })

@@ -1,7 +1,9 @@
 defmodule ExchatWeb.MainLive.Index do
+  require Logger
   use ExchatWeb, :live_view
 
   alias Exchat.Chat
+  alias Exchat.Chat.Conversation
 
   @impl true
   def mount(_params, session, socket) do
@@ -9,6 +11,7 @@ defmodule ExchatWeb.MainLive.Index do
       %{"user_token" => user_token} ->
         current_user = Exchat.Accounts.get_user_by_session_token(user_token)
         conversations = Chat.list_conversations(current_user.id)
+        Logger.info("conversations: #{inspect(conversations)}")
 
         {:ok,
          socket
@@ -17,6 +20,8 @@ defmodule ExchatWeb.MainLive.Index do
          |> assign(:selected_conversation, nil)
          |> assign(:messages, [])
          |> assign(:uploaded_files, [])
+         |> assign(:show_new_conversation_modal, false)
+         |> assign(:new_conversation_changeset, Chat.change_conversation(%Conversation{}))
          |> assign(:show_emoji_picker, nil)}
 
       _ ->
@@ -24,6 +29,35 @@ defmodule ExchatWeb.MainLive.Index do
          socket
          |> put_flash(:error, "You must be logged in to access this page")
          |> redirect(to: ~p"/users/log_in")}
+    end
+  end
+
+  @impl true
+  def handle_event("open_new_conversation_modal", _params, socket) do
+    {:noreply, assign(socket, :show_new_conversation_modal, true)}
+  end
+
+  # 处理关闭模态框事件
+  def handle_event("close_new_conversation_modal", _params, socket) do
+    {:noreply, assign(socket, :show_new_conversation_modal, false)}
+  end
+
+  # 处理创建对话事件
+  def handle_event("create_conversation", params, socket) do
+    params = Map.merge(params, %{"user_id" => socket.assigns.current_user.id})
+
+    case Chat.create_conversation(params) do
+      {:ok, conversation} ->
+        {:noreply,
+         socket
+         |> stream_insert(:mains, conversation)
+         |> assign(:show_new_conversation_modal, false)
+         |> put_flash(:info, "Conversation created successfully")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply,
+         assign(socket, :new_conversation_changeset, changeset)
+         |> put_flash(:info, "Conversation created failed #{inspect(changeset)}")}
     end
   end
 
