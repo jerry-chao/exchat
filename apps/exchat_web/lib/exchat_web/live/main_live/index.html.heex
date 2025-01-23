@@ -122,7 +122,7 @@
                 if(message.from == @current_user.id, do: "items-end", else: "items-start")
               ]}>
                 <%= if message.from != @current_user.id do %>
-                  <p class="text-xs text-gray-500 font-medium">{message.sender_name}</p>
+                  <p class="text-xs text-gray-500 font-medium">{message.from}</p>
                 <% end %>
                 <p class="text-sm leading-relaxed break-words">{message.txt}</p>
                 <div class="flex items-center space-x-2">

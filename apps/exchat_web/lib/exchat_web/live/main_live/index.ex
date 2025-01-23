@@ -102,6 +102,13 @@ defmodule ExchatWeb.MainLive.Index do
   @impl true
   def handle_info({:message, message}, socket) do
     Logger.info("receive message #{inspect(message)}")
-    {:noreply, socket |> update(:messages, fn messages -> messages ++ [message] end)}
+    conversation = Chat.get_conversation!(message.to)
+    messages = Message.get_messages(socket.assigns.current_user.id, conversation.cid)
+
+    {:noreply,
+     socket
+     |> assign(:selected_conversation, conversation)
+     |> assign(:messages, messages)
+     |> update(:messages, fn messages -> messages ++ [message] end)}
   end
 end
