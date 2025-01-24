@@ -87,8 +87,8 @@ defmodule Message do
 
   ## Examples
 
-      iex> get_messages(5,6)
-      [%Message.Messages{}, ...]
+      iex> Message.get_messages(5, 6)
+      []
   """
   def get_messages(user_id, cid) when is_integer(cid) and is_integer(user_id) do
     import Ecto.Query

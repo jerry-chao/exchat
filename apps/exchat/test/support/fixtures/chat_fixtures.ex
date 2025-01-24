@@ -8,14 +8,18 @@ defmodule Exchat.ChatFixtures do
   Generate a conversation.
   """
   def conversation_fixture(attrs \\ %{}) do
-    {:ok, conversation} =
+    attrs =
       attrs
       |> Enum.into(%{
-        cid: "some cid",
-        name: "some name",
-        type: "some type"
+        user_id: 2,
+        cid: 3,
+        name: "John Doe",
+        type: "single"
       })
-      |> Exchat.Chat.create_conversation()
+
+    IO.puts("attrs #{inspect(attrs)}")
+
+    {:ok, conversation} = attrs |> Exchat.Chat.create_conversation()
 
     conversation
   end

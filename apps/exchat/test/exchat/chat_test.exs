@@ -35,9 +35,16 @@ defmodule Exchat.ChatTest do
 
     test "update_conversation/2 with valid data updates the conversation" do
       conversation = conversation_fixture()
-      update_attrs = %{name: "some updated name", type: "some updated type", cid: "some updated cid"}
 
-      assert {:ok, %Conversation{} = conversation} = Chat.update_conversation(conversation, update_attrs)
+      update_attrs = %{
+        name: "some updated name",
+        type: "some updated type",
+        cid: "some updated cid"
+      }
+
+      assert {:ok, %Conversation{} = conversation} =
+               Chat.update_conversation(conversation, update_attrs)
+
       assert conversation.name == "some updated name"
       assert conversation.type == "some updated type"
       assert conversation.cid == "some updated cid"
